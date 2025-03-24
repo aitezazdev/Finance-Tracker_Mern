@@ -1,6 +1,7 @@
 import Expense from "../models/expense.model.js";
 import User from "../models/user.model.js";
 
+// create expense
 const createExpense = async (req, res) => {
   try {
     const { amount, category, date } = req.body;
@@ -44,4 +45,41 @@ const createExpense = async (req, res) => {
   }
 };
 
-export default createExpense;
+// delete expense
+const deleteExpense = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "id is required",
+      });
+    }
+    const expense = await Expense.findById(id);
+    if (!expense) {
+      return res.status(404).json({
+        success: false,
+        message: "Expense not found",
+      });
+    }
+
+    await User.findByIdAndUpdate(expense.user, {
+      $pull: { expenses: id },
+    });
+
+    await Expense.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Expense deleted successfully",
+      data: expense,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+};
+
+export { createExpense, deleteExpense };
