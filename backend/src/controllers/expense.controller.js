@@ -108,4 +108,56 @@ const getExpenses = async (req, res) => {
   }
 };
 
-export { createExpense, deleteExpense, getExpenses };
+// edit an expense
+const editExpense = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "id is required",
+      });
+    }
+    const expense = await Expense.findById(id);
+    if (!expense) {
+      return res.status(404).json({
+        success: false,
+        message: "Expense not found",
+      });
+    }
+
+    const { amount, category, date } = req.body;
+
+    if (amount !== undefined) {
+      if (amount <= 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Amount must be greater than zero",
+        });
+      }
+      expense.amount = amount;
+    }
+    if (category) {
+      expense.category = category;
+    }
+    if (date) {
+      expense.date = date;
+    }
+
+    await expense.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Expense updated successfully",
+      data: expense,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "something went wrong!",
+    })
+  }
+}
+
+export { createExpense, deleteExpense, getExpenses, editExpense };
