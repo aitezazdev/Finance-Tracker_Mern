@@ -3,6 +3,7 @@ import dbConnection from "./src/config/db.js";
 import dotenv from "dotenv";
 import authRouter from "./src/routes/auth.routes.js";
 import expenseRouter from "./src/routes/expense.routes.js";
+import summaryRouter from "./src/routes/summary.routes.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRouter);
 app.use("/api", expenseRouter);
+app.use("/api", summaryRouter);
 
 app.listen(3000, () => {
   console.log("Server running on port 3000");

@@ -8,18 +8,22 @@ const expenseSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ["Food", "Transport", "Bills", "Shopping", "Health", "Entertainment", "Other"] 
+    enum: [
+      "Food", "Transport", "Bills", "Shopping", "Health", "Entertainment", "Other"],
   },
   date: {
     type: Date,
-    default: Date.now,
+    required: true,
+  },
+  description: {
+    type: String,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-});
+}, { timestamps: true });
 
 const Expense = mongoose.model("Expense", expenseSchema);
 

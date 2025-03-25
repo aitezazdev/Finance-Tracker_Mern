@@ -4,7 +4,7 @@ import User from "../models/user.model.js";
 // create expense
 const createExpense = async (req, res) => {
   try {
-    const { amount, category, date } = req.body;
+    const { amount, category, date, description } = req.body;
     if (!amount || amount <= 0) {
       return res.status(400).json({
         success: false,
@@ -18,12 +18,32 @@ const createExpense = async (req, res) => {
       });
     }
 
+    if (!date) {
+      return res.status(400).json({
+        success: false,
+        message: "date is required",
+      });
+    }
+
+    const dateFormatRegex = /^\d{2}-\d{2}-\d{4}$/;
+
+    if (!dateFormatRegex.test(date)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid date format. Use DD-MM-YYYY",
+      });
+    }
+
+    const [day, month, year] = date.split("-");
+    const formattedDate = `${year}-${month}-${day}`;
+
     const userID = req.user.id;
 
     const expense = await Expense.create({
       amount,
       category,
-      date: date ?? new Date(),
+      date: formattedDate,
+      description,
       user: userID,
     });
 
@@ -35,6 +55,7 @@ const createExpense = async (req, res) => {
 
     res.status(201).json({
       success: true,
+      message: "expense created successfully",
       data: expense,
     });
   } catch (error) {
@@ -126,8 +147,9 @@ const editExpense = async (req, res) => {
       });
     }
 
-    const { amount, category, date } = req.body;
+    const { amount, category, date, description } = req.body;
 
+    // Validate amount if provided
     if (amount !== undefined) {
       if (amount <= 0) {
         return res.status(400).json({
@@ -137,11 +159,29 @@ const editExpense = async (req, res) => {
       }
       expense.amount = amount;
     }
+
     if (category) {
       expense.category = category;
     }
+
     if (date) {
-      expense.date = date;
+      const dateFormatRegex = /^\d{2}-\d{2}-\d{4}$/;
+
+      if (!dateFormatRegex.test(date)) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid date format. Use DD-MM-YYYY",
+        });
+      }
+
+      const [day, month, year] = date.split("-");
+      const formattedDate = `${year}-${month}-${day}`;
+
+      expense.date = formattedDate;
+    }
+
+    if (description) {
+      expense.description = description;
     }
 
     await expense.save();
@@ -151,13 +191,12 @@ const editExpense = async (req, res) => {
       message: "Expense updated successfully",
       data: expense,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
       message: error.message || "something went wrong!",
-    })
+    });
   }
-}
+};
 
 export { createExpense, deleteExpense, getExpenses, editExpense };
