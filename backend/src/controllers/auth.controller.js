@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 const register = async (req, res) => {
   try {
     const { name, email, password, budgets } = req.body;
-    if (!name || !email || !password || !budgets ) {
+    if (!name || !email || !password || budgets === undefined) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -30,10 +30,21 @@ const register = async (req, res) => {
       budgets,
     });
 
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    const { password: _, ...userData } = user.toObject();
+
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      data: user,
+      data: userData,
+      token: token,
     });
   } catch (error) {
     res.status(500).json({
@@ -64,7 +75,10 @@ const login = async (req, res) => {
       });
     }
 
-    const comparePassword = await bcrypt.compare(password, isUserExist.password);
+    const comparePassword = await bcrypt.compare(
+      password,
+      isUserExist.password
+    );
 
     if (!comparePassword) {
       return res.status(400).json({
