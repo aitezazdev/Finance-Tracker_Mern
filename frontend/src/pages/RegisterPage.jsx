@@ -1,16 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const RegisterPage = () => {
+  const [data, setData] = useState({
+    name: '',
+    email: '',
+    password: '', 
+  });
+  const [error, setError] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if(!data.name || !data.email || !data.password) {
+      setError('All fields are required');
+    }
+  }
+
+  const handleChange = (e) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value
+    })
+  }
+
+
   return (
     <div className="min-h-screen w-full">
       <div className="w-full max-w-md mx-auto mt-4">
-        <form className='bg-white shadow-2xl rounded-2xl px-8 pt-6 pb-8 mb-4 border border-gray-100 transform transition-all'>
+        <form onSubmit={handleSubmit} className='bg-white shadow-2xl rounded-2xl px-8 pt-6 pb-8 mb-4 border border-gray-100 transform transition-all'>
           <h3 className='text-3xl font-semibold py-2 text-center tracking-tight'>Create Account</h3>
           <div>
             <div className='my-4'>  
               <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Name</label>
-              <input 
+              <input onChange={handleChange} value={data.name}
                 className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300" 
                 type="text" 
                 name="name" 
@@ -21,7 +44,7 @@ const RegisterPage = () => {
             </div>
             <div className='my-4'>
               <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-              <input 
+              <input onChange={handleChange} value={data.email}
                 className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300" 
                 type="email" 
                 name="email" 
@@ -32,7 +55,7 @@ const RegisterPage = () => {
             </div>
             <div className='my-4'>
               <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-              <input 
+              <input onChange={handleChange} value={data.password}
                 className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300" 
                 type="password" 
                 name="password" 
