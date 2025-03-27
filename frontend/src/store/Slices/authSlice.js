@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { login, register } from "../../api/authApi";
 
 const initialState = {
-  user: null,
+  user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null,
+  token: localStorage.getItem("token") || null,
   loading: false,
   error: null,
 };
@@ -42,6 +43,12 @@ const authSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -51,7 +58,10 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.data.user;
+        state.token = action.payload.data.token;
+        localStorage.setItem("user", JSON.stringify(action.payload.data.user));
+        localStorage.setItem("token", action.payload.data.token);
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -64,7 +74,10 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.data.user;
+        state.token = action.payload.data.token;
+        localStorage.setItem("user", JSON.stringify(action.payload.data.user));
+        localStorage.setItem("token", action.payload.data.token);
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -74,5 +87,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, logout } = authSlice.actions;
 export default authSlice.reducer;

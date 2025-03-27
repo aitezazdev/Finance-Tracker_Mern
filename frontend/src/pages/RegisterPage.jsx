@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../store/Slices/authSlice";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { error, loading } = useSelector((state) => state.auth);
   const [data, setData] = useState({
     name: "",
@@ -16,7 +17,6 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Client-side validation
     let newErrors = {};
     if (!data.name) newErrors.name = "Name is required";
     if (!data.email) newErrors.email = "Email is required";
@@ -36,6 +36,8 @@ const RegisterPage = () => {
         password: "",
       });
       setErrors({});
+
+      navigate("/");
 
       console.log("Registration successful:", result);
       

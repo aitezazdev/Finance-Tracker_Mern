@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../store/Slices/authSlice";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { error, loading } = useSelector((state) => state.auth);
   const [data, setData] = useState({
     email: "",
@@ -33,6 +34,8 @@ const LoginPage = () => {
         password: "",
       });
       setErrors({});
+
+      navigate("/");
 
       console.log("Login successful", result);
     } catch (error) {
