@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../store/Slices/authSlice";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const { error, loading } = useSelector((state) => state.auth);
   const [data, setData] = useState({
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     let newErrors = {};
@@ -22,13 +26,21 @@ const LoginPage = () => {
       return;
     }
 
-    console.log("Form Submitted", data);
+    try {
+      const result = await dispatch(loginUser(data)).unwrap();
+      setData({
+        email: "",
+        password: "",
+      });
+      setErrors({});
 
-    setData({
-      email: "",
-      password: "",
-    });
-    setErrors({});
+      console.log("Login successful", result);
+    } catch (error) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        backend: error || "Login failed, plz try again",
+      }));
+    }
   };
 
   const handleChange = (e) => {
@@ -41,6 +53,7 @@ const LoginPage = () => {
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: "",
+      backend: ""
     }));
   };
 
@@ -52,11 +65,25 @@ const LoginPage = () => {
         <h3 className="text-3xl font-semibold py-2 text-center tracking-tight">
           Login Account
         </h3>
+
+        {errors.backend && (
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+            role="alert">
+            <span className="block sm:inline">{errors.backend}</span>
+          </div>
+        )}
+
         <div>
           <div className="my-4">
-            <label htmlFor="name" className="block text-gray-700 text-sm font-bold">Email</label>
+            <label
+              htmlFor="name"
+              className="block text-gray-700 text-sm font-bold">
+              Email
+            </label>
             <input
-              onChange={handleChange} value={data.email}
+              onChange={handleChange}
+              value={data.email}
               className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300"
               type="email"
               name="email"
@@ -69,9 +96,14 @@ const LoginPage = () => {
             )}
           </div>
           <div className="my-4">
-            <label htmlFor="name" className="block text-gray-700 text-sm font-bold">Password</label>
+            <label
+              htmlFor="name"
+              className="block text-gray-700 text-sm font-bold">
+              Password
+            </label>
             <input
-              onChange={handleChange} value={data.password}
+              onChange={handleChange}
+              value={data.password}
               className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300"
               type="password"
               name="password"
@@ -83,11 +115,13 @@ const LoginPage = () => {
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
           </div>
-          <input
-            type="submit"
-            value="Login"
-            className="outline-none mt-5 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white rounded py-2.5 px-2 text-lg w-full"
-          />
+          <button
+              type="submit"
+              disabled={loading}
+              className="outline-none mt-5 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white rounded py-2.5 px-2 text-lg w-full"
+            >
+              {loading ? "Signing in ..." : "Login"}
+            </button>
         </div>
         <div>
           <p className="text-center mt-5">
