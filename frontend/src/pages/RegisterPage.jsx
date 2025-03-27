@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../store/Slices/authSlice";
 
 const RegisterPage = () => {
+  const dispatch = useDispatch();
+  const { error, loading } = useSelector((state) => state.auth);
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -26,10 +30,12 @@ const RegisterPage = () => {
 
     console.log("Form submitted:", data);
 
+    dispatch(registerUser(data));
+
     setData({
       name: "",
       email: "",
-      password: ""
+      password: "",
     });
 
     setErrors({});
@@ -61,7 +67,7 @@ const RegisterPage = () => {
             <div className="my-4">
               <label
                 htmlFor="name"
-                className="block text-gray-700 text-sm font-bold mb-2">
+                className="block text-gray-700 text-sm font-bold">
                 Name
               </label>
               <input
@@ -74,12 +80,14 @@ const RegisterPage = () => {
                 placeholder="Enter your name"
                 autoComplete="off"
               />
-              {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+              )}
             </div>
             <div className="my-4">
               <label
                 htmlFor="email"
-                className="block text-gray-700 text-sm font-bold mb-2">
+                className="block text-gray-700 text-sm font-bold">
                 Email
               </label>
               <input
@@ -92,12 +100,14 @@ const RegisterPage = () => {
                 placeholder="user@email.com"
                 autoComplete="off"
               />
-              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
             <div className="my-4">
               <label
                 htmlFor="password"
-                className="block text-gray-700 text-sm font-bold mb-2">
+                className="block text-gray-700 text-sm font-bold">
                 Password
               </label>
               <input
@@ -110,12 +120,15 @@ const RegisterPage = () => {
                 placeholder="Enter your password"
                 autoComplete="off"
               />
-              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
             </div>
             <button
               type="submit"
+              disabled={loading}
               className="outline-none mt-5 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white rounded py-2.5 px-2 text-lg w-full">
-              Register
+              {loading ? "Registering ..." : "Register"}
             </button>
           </div>
           <div>

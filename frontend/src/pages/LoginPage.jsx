@@ -54,7 +54,7 @@ const LoginPage = () => {
         </h3>
         <div>
           <div className="my-4">
-            <label htmlFor="name">Email</label>
+            <label htmlFor="name" className="block text-gray-700 text-sm font-bold">Email</label>
             <input
               onChange={handleChange} value={data.email}
               className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300"
@@ -69,7 +69,7 @@ const LoginPage = () => {
             )}
           </div>
           <div className="my-4">
-            <label htmlFor="name">Password</label>
+            <label htmlFor="name" className="block text-gray-700 text-sm font-bold">Password</label>
             <input
               onChange={handleChange} value={data.password}
               className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300"
