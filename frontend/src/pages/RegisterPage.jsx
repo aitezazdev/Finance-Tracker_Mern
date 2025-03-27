@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../store/Slices/authSlice";
@@ -13,32 +13,40 @@ const RegisterPage = () => {
   });
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Client-side validation
     let newErrors = {};
     if (!data.name) newErrors.name = "Name is required";
     if (!data.email) newErrors.email = "Email is required";
     if (!data.password) newErrors.password = "Password is required";
-
-    setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
-    console.log("Form submitted:", data);
+    try {
+      const result = await dispatch(registerUser(data)).unwrap();
+      
+      setData({
+        name: "",
+        email: "",
+        password: "",
+      });
+      setErrors({});
 
-    dispatch(registerUser(data));
-
-    setData({
-      name: "",
-      email: "",
-      password: "",
-    });
-
-    setErrors({});
+      console.log("Registration successful:", result);
+      
+    } catch (err) {
+      console.error("Registration error:", err);
+      
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        backend: err || "Registration failed. Please try again."
+      }));
+    }
   };
 
   const handleChange = (e) => {
@@ -51,6 +59,7 @@ const RegisterPage = () => {
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: "",
+      backend: ""
     }));
   };
 
@@ -59,15 +68,25 @@ const RegisterPage = () => {
       <div className="w-full max-w-md mx-auto mt-4">
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow-2xl rounded-2xl px-8 pt-6 pb-8 mb-4 border border-gray-100 transform transition-all">
+          className="bg-white shadow-2xl rounded-2xl px-8 pt-6 pb-8 mb-4 border border-gray-100 transform transition-all"
+        >
           <h3 className="text-3xl font-semibold py-2 text-center tracking-tight">
             Create Account
           </h3>
+          
+          {/* Backend error display */}
+          {errors.backend && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+              <span className="block sm:inline">{errors.backend}</span>
+            </div>
+          )}
+
           <div>
             <div className="my-4">
               <label
                 htmlFor="name"
-                className="block text-gray-700 text-sm font-bold">
+                className="block text-gray-700 text-sm font-bold"
+              >
                 Name
               </label>
               <input
@@ -87,7 +106,8 @@ const RegisterPage = () => {
             <div className="my-4">
               <label
                 htmlFor="email"
-                className="block text-gray-700 text-sm font-bold">
+                className="block text-gray-700 text-sm font-bold"
+              >
                 Email
               </label>
               <input
@@ -107,7 +127,8 @@ const RegisterPage = () => {
             <div className="my-4">
               <label
                 htmlFor="password"
-                className="block text-gray-700 text-sm font-bold">
+                className="block text-gray-700 text-sm font-bold"
+              >
                 Password
               </label>
               <input
@@ -127,7 +148,8 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="outline-none mt-5 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white rounded py-2.5 px-2 text-lg w-full">
+              className="outline-none mt-5 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white rounded py-2.5 px-2 text-lg w-full"
+            >
               {loading ? "Registering ..." : "Register"}
             </button>
           </div>
@@ -136,7 +158,8 @@ const RegisterPage = () => {
               Already have an account?
               <Link
                 to={"/login"}
-                className="text-blue-500 hover:underline ml-1">
+                className="text-blue-500 hover:underline ml-1"
+              >
                 Login
               </Link>
             </p>
