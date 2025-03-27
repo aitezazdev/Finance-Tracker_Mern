@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
 // register user
 const register = async (req, res) => {
   try {
-    const { name, email, password, budgets } = req.body;
-    if (!name || !email || !password || budgets === undefined) {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
@@ -26,8 +26,7 @@ const register = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password: hashPassword,
-      budgets,
+      password: hashPassword
     });
 
     const token = jwt.sign(

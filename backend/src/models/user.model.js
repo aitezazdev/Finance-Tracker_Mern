@@ -15,10 +15,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    budgets: {
-      type: Number,
-      required: true,
-    },
     expenses: [
       {
         type: mongoose.Schema.Types.ObjectId,
