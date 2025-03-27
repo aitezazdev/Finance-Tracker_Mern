@@ -30,7 +30,7 @@ const register = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
+    const createUser = await User.create({
       name,
       email,
       password: hashPassword
@@ -38,19 +38,21 @@ const register = async (req, res) => {
 
     const token = jwt.sign(
       {
-        id: user._id,
+        id: createUser._id,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
 
-    const { password: _, ...userData } = user.toObject();
+    const { password: _, ...user } = createUser.toObject();
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
-      message: "User created successfully",
-      data: userData,
-      token: token,
+      message: "User logged in successfully",
+      data: {
+        user,
+        token,
+      },
     });
   } catch (error) {
     res.status(500).json({
