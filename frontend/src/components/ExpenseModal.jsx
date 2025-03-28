@@ -1,7 +1,7 @@
 import React from "react";
 import ExpenseForm from "./ExpenseForm";
 
-const ExpenseModal = ({ show, onClose, addExpense }) => {
+const ExpenseModal = ({ show, onClose, setExpenses }) => {
   if (!show) return null;
 
   return (
@@ -19,7 +19,7 @@ const ExpenseModal = ({ show, onClose, addExpense }) => {
         <h2 className="text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
           Add New Expense
         </h2>
-        <ExpenseForm addExpense={addExpense} onClose={onClose} />
+        <ExpenseForm onClose={onClose} setExpenses={setExpenses} />
       </div>
     </div>
   );

@@ -1,25 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ExpenseList from "../components/ExpenseList";
 import ExpenseModal from "../components/ExpenseModal";
 import ExpenseFilter from "../components/ExpenseFilter";
+import { getExpenses } from "../api/expenseApi";
 
 const HomePage = () => {
-  const [expenses, setExpenses] = useState([
-    { id: 1, amount: 50, category: "Food", date: "2023-03-01", description: "Lunch at cafe" },
-    { id: 2, amount: 120, category: "Transport", date: "2023-03-02", description: "Monthly metro pass" },
-  ]);
+  const [expenses, setExpenses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState({ category: "", date: "" });
 
-  const addExpense = (expense) => {
-    setExpenses([...expenses, { ...expense, id: expenses.length + 1 }]);
-    setShowModal(false);
-  };
+    const filteredExpenses = expenses.filter((expense) => {
+        return (filter.category ? expense.category === filter.category : true) &&
+               (filter.date ? expense.date === filter.date : true);
+      });
 
-  const filteredExpenses = expenses.filter((expense) => {
-    return (filter.category ? expense.category === filter.category : true) &&
-           (filter.date ? expense.date === filter.date : true);
-  });
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const response = await getExpenses();
+        console.log(response.data);
+        setExpenses(response.data);
+        
+      } catch (error) {
+        console.error("Error fetching expenses:", error);
+        setExpenses([]);
+      }
+    }
+
+    fetchExpenses();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 relative">
@@ -36,7 +45,7 @@ const HomePage = () => {
       </div>
       <ExpenseFilter filter={filter} setFilter={setFilter} />
       <ExpenseList expenses={filteredExpenses} />
-      <ExpenseModal show={showModal} onClose={() => setShowModal(false)} addExpense={addExpense} />
+      <ExpenseModal show={showModal} onClose={() => setShowModal(false)} setExpenses={setExpenses} />
     </div>
   );
 };

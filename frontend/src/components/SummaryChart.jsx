@@ -1,4 +1,3 @@
-// src/components/SummaryChart.js
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 

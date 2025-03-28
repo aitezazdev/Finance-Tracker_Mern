@@ -15,13 +15,11 @@ const Navbar = () => {
 
   return (
     <nav className="flex items-center justify-between px-12 py-4 bg-gray-900 shadow-md text-white">
-      {/* Logo */}
       <Link to="/" className="text-3xl font-extrabold tracking-wide flex items-center space-x-2">
         <span>💰</span>
         <span>Expense Tracker</span>
       </Link>
 
-      {/* Navigation Links */}
       <ul className="flex items-center space-x-6 text-lg font-medium">
         <li>
           <Link to="/" className="hover:text-gray-300 transition duration-200">
@@ -37,7 +35,6 @@ const Navbar = () => {
         )}
       </ul>
 
-      {/* Auth Section */}
       <div className="flex items-center space-x-6">
         {user ? (
           <>

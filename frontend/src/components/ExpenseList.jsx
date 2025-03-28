@@ -49,7 +49,7 @@ const ExpenseList = ({ expenses, setExpenses }) => {
           ) : (
             expenses.map((expense, index) => (
               <tr
-                key={expense.id}
+                key={index}
                 className={`border-b transition ${
                   index % 2 === 0 ? "bg-gray-100" : "bg-white"
                 } hover:bg-gray-200`}
@@ -118,7 +118,7 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                   </>
                 ) : (
                   <>
-                    <td className="py-4 px-4 text-center">{expense.date}</td>
+                    <td className="py-4 px-4 text-center">{new Date(expense.date).toLocaleDateString("en-GB").replace(/\//g, "-")}</td>
                     <td className="py-4 px-4 text-center">{expense.category}</td>
                     <td className="py-4 px-4 text-center">{expense.description || "—"}</td>
                     <td className="py-4 px-4 text-center font-semibold">${expense.amount}</td>
