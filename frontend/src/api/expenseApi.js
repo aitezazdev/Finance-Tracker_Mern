@@ -20,8 +20,6 @@ api.interceptors.request.use((config) => {
 // get expenses
 export const getExpenses = async () => {
   const response = await api.get("/get-expenses");
-  console.log(response.data);
-  
   return response.data;
 };
 
@@ -29,6 +27,12 @@ export const getExpenses = async () => {
 // create an expense
 export const addExpense = async (expense) => {
   const response = await api.post("/create-expense", expense);
+  return response.data;
+}
+
+// delete expense
+export const deleteExpense = async (id) => {
+  const response = await api.delete(`/delete-expense/${id}`);
   console.log(response.data);
   return response.data;
 }

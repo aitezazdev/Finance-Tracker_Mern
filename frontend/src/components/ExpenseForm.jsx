@@ -34,12 +34,7 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
 
     try {
       const response = await addExpense(formData);
-
-      if (response.success && response.data) {
-        setExpenses((prevExpenses) => [response.data, ...prevExpenses]);
-      } else {
-        console.error("Unexpected response structure:", response);
-      }
+      setExpenses((prevExpenses) => [response.data, ...prevExpenses]);
 
       setFormData({
         amount: "",
@@ -50,7 +45,6 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
 
       setErrors({});
       onClose();
-
     } catch (error) {
       console.error("Error adding expense:", error);
     }

@@ -18,7 +18,6 @@ const HomePage = () => {
     const fetchExpenses = async () => {
       try {
         const response = await getExpenses();
-        console.log(response.data);
         setExpenses(response.data);
         
       } catch (error) {
@@ -44,7 +43,7 @@ const HomePage = () => {
         </button>
       </div>
       <ExpenseFilter filter={filter} setFilter={setFilter} />
-      <ExpenseList expenses={filteredExpenses} />
+      <ExpenseList expenses={filteredExpenses} setExpenses={setExpenses} />
       <ExpenseModal show={showModal} onClose={() => setShowModal(false)} setExpenses={setExpenses} />
     </div>
   );

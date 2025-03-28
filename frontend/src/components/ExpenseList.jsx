@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { deleteExpense } from "../api/expenseApi";
 
 const ExpenseList = ({ expenses, setExpenses }) => {
   const [editingId, setEditingId] = useState(null);
@@ -23,8 +24,18 @@ const ExpenseList = ({ expenses, setExpenses }) => {
     setEditData({});
   };
 
-  const handleDelete = (id) => {
-    setExpenses((prevExpenses) => prevExpenses.filter((expense) => expense.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await deleteExpense(id);
+
+      setExpenses((prevExpenses) =>
+        prevExpenses.filter((expense) => expense._id !== id)
+      );
+
+      console.log(`Expense with ID ${id} deleted successfully`);
+    } catch (error) {
+      console.error("Error deleting expense:", error);
+    }
   };
 
   return (
@@ -49,11 +60,10 @@ const ExpenseList = ({ expenses, setExpenses }) => {
           ) : (
             expenses.map((expense, index) => (
               <tr
-                key={index}
+                key={expense._id}
                 className={`border-b transition ${
                   index % 2 === 0 ? "bg-gray-100" : "bg-white"
-                } hover:bg-gray-200`}
-              >
+                } hover:bg-gray-200`}>
                 {editingId === expense.id ? (
                   <>
                     <td className="py-4 px-4 text-center">
@@ -72,8 +82,7 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                         onChange={(e) =>
                           setEditData({ ...editData, category: e.target.value })
                         }
-                        className="w-full px-3 py-2 border rounded"
-                      >
+                        className="w-full px-3 py-2 border rounded">
                         <option value="Food">🍔 Food</option>
                         <option value="Transport">🚕 Transport</option>
                         <option value="Entertainment">🎬 Entertainment</option>
@@ -86,7 +95,10 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                         type="text"
                         value={editData.description}
                         onChange={(e) =>
-                          setEditData({ ...editData, description: e.target.value })
+                          setEditData({
+                            ...editData,
+                            description: e.target.value,
+                          })
                         }
                         className="w-full px-3 py-2 border rounded"
                       />
@@ -104,35 +116,41 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                     <td className="py-4 px-6 flex justify-center space-x-2">
                       <button
                         onClick={handleSave}
-                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition"
-                      >
+                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition">
                         ✅ Save
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded transition"
-                      >
+                        className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded transition">
                         ❌ Cancel
                       </button>
                     </td>
                   </>
                 ) : (
                   <>
-                    <td className="py-4 px-4 text-center">{new Date(expense.date).toLocaleDateString("en-GB").replace(/\//g, "-")}</td>
-                    <td className="py-4 px-4 text-center">{expense.category}</td>
-                    <td className="py-4 px-4 text-center">{expense.description || "—"}</td>
-                    <td className="py-4 px-4 text-center font-semibold">${expense.amount}</td>
+                    <td className="py-4 px-4 text-center">
+                      {new Date(expense.date)
+                        .toLocaleDateString("en-GB")
+                        .replace(/\//g, "-")}
+                    </td>
+                    <td className="py-4 px-4 text-center">
+                      {expense.category}
+                    </td>
+                    <td className="py-4 px-4 text-center">
+                      {expense.description || "—"}
+                    </td>
+                    <td className="py-4 px-4 text-center font-semibold">
+                      ${expense.amount}
+                    </td>
                     <td className="py-4 px-6 flex justify-center space-x-2">
                       <button
                         onClick={() => handleEdit(expense)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition"
-                      >
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition">
                         ✏️ Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(expense.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition"
-                      >
+                        onClick={() => handleDelete(expense._id)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
                         🗑️ Delete
                       </button>
                     </td>
