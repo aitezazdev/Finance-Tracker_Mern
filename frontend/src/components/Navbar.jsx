@@ -21,17 +21,19 @@ const Navbar = () => {
       </Link>
 
       <ul className="flex items-center space-x-6 text-lg font-medium">
-        <li>
-          <Link to="/" className="hover:text-gray-300 transition duration-200">
-            Home
-          </Link>
-        </li>
         {user && (
-          <li>
-            <Link to="/summary" className="hover:text-gray-300 transition duration-200">
-              Summary
-            </Link>
-          </li>
+          <>
+            <li>
+              <Link to="/" className="hover:text-gray-300 transition duration-200">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/summary" className="hover:text-gray-300 transition duration-200">
+                Summary
+              </Link>
+            </li>
+          </>
         )}
       </ul>
 
@@ -48,13 +50,7 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <Link to="/register" className="hover:text-gray-300 transition duration-200">
-              Register
-            </Link>
-            <Link 
-              to="/login" 
-              className="bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-600 transition duration-200 shadow-md"
-            >
+            <Link to="/login" className="bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-600 transition duration-200 shadow-md">
               Login
             </Link>
           </>

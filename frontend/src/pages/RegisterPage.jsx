@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../store/Slices/authSlice";
+import { MdOutlineError } from "react-icons/md";
+import { MdOutlineEmail } from "react-icons/md";
+import { RiLockPasswordLine } from "react-icons/ri";
+import { BiLoaderAlt } from "react-icons/bi";
+import { FiUser } from "react-icons/fi";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -66,102 +71,139 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full">
-      <div className="w-full max-w-md mx-auto mt-4">
+    <div className="w-full flex items-center pt-5 justify-center bg-gray-50">
+      <div className="w-full max-w-md px-6">
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow-2xl rounded-2xl px-8 pt-6 pb-8 mb-4 border border-gray-100 transform transition-all"
+          className="bg-white shadow-xl rounded-xl px-8 pt-4 pb-10 border border-gray-200 transition-all"
         >
-          <h3 className="text-3xl font-semibold py-2 text-center tracking-tight">
-            Create Account
-          </h3>
+          <div className="mb-8 text-center">
+            <h3 className="text-3xl font-bold text-gray-800 mb-2">
+              Create Account
+            </h3>
+            <p className="text-gray-600">Sign up to get started</p>
+          </div>
           
           {errors.backend && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-              <span className="block sm:inline">{errors.backend}</span>
+            <div
+              className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded mb-6"
+              role="alert"
+            >
+              <div className="flex">
+                <div className="py-1">
+                  <MdOutlineError className="w-6 h-6 mr-4 text-red-500" />
+                </div>
+                <span>{errors.backend}</span>
+              </div>
             </div>
           )}
 
-          <div>
-            <div className="my-4">
+          <div className="space-y-6">
+            <div>
               <label
                 htmlFor="name"
-                className="block text-gray-700 text-sm font-bold"
+                className="block text-gray-700 text-sm font-semibold mb-2"
               >
-                Name
+                Full Name
               </label>
-              <input
-                onChange={handleChange}
-                value={data.name}
-                className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300"
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Enter your name"
-                autoComplete="off"
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiUser className="w-5 h-5 text-gray-400" />
+                </div>
+                <input
+                  onChange={handleChange}
+                  value={data.name}
+                  className="w-full pl-10 py-3 px-4 text-gray-700 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:bg-white border border-gray-300 transition-all"
+                  type="text"
+                  name="name"
+                  id="name"
+                  placeholder="User Khan"
+                  autoComplete="off"
+                />
+              </div>
               {errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                <p className="text-red-500 text-sm mt-1 font-medium">{errors.name}</p>
               )}
             </div>
-            <div className="my-4">
+            
+            <div>
               <label
                 htmlFor="email"
-                className="block text-gray-700 text-sm font-bold"
+                className="block text-gray-700 text-sm font-semibold mb-2"
               >
-                Email
+                Email Address
               </label>
-              <input
-                onChange={handleChange}
-                value={data.email}
-                className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300"
-                type="email"
-                name="email"
-                id="email"
-                placeholder="user@email.com"
-                autoComplete="off"
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <MdOutlineEmail className="w-5 h-5 text-gray-400" />
+                </div>
+                <input
+                  onChange={handleChange}
+                  value={data.email}
+                  className="w-full pl-10 py-3 px-4 text-gray-700 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:bg-white border border-gray-300 transition-all"
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="user@example.com"
+                  autoComplete="off"
+                />
+              </div>
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                <p className="text-red-500 text-sm mt-1 font-medium">{errors.email}</p>
               )}
             </div>
-            <div className="my-4">
+            
+            <div>
               <label
                 htmlFor="password"
-                className="block text-gray-700 text-sm font-bold"
+                className="block text-gray-700 text-sm font-semibold mb-2"
               >
                 Password
               </label>
-              <input
-                onChange={handleChange}
-                value={data.password}
-                className="pl-3 w-full py-2.5 px-4 text-gray-700 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 mt-1 transition-all duration-300"
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Enter your password"
-                autoComplete="off"
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <RiLockPasswordLine className="w-5 h-5 text-gray-400" />
+                </div>
+                <input
+                  onChange={handleChange}
+                  value={data.password}
+                  className="w-full pl-10 py-3 px-4 text-gray-700 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:bg-white border border-gray-300 transition-all"
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="••••••••"
+                  autoComplete="off"
+                />
+              </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                <p className="text-red-500 text-sm mt-1 font-medium">{errors.password}</p>
               )}
             </div>
+            
             <button
               type="submit"
               disabled={loading}
-              className="outline-none mt-5 cursor-pointer bg-blue-500 hover:bg-blue-600 text-white rounded py-2.5 px-2 text-lg w-full"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-all disabled:opacity-70"
             >
-              {loading ? "Registering ..." : "Register"}
+              {loading ? (
+                <span className="flex items-center">
+                  <BiLoaderAlt className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+                  Creating account...
+                </span>
+              ) : (
+                "Create Account"
+              )}
             </button>
           </div>
-          <div>
-            <p className="text-center mt-5">
-              Already have an account?
+          
+          <div className="mt-8 text-center">
+            <p className="text-gray-600">
+              Already have an account?{" "}
               <Link
-                to={"/login"}
-                className="text-blue-500 hover:underline ml-1"
+                to="/login"
+                className="text-blue-600 hover:text-blue-800 font-semibold"
               >
-                Login
+                Sign in
               </Link>
             </p>
           </div>

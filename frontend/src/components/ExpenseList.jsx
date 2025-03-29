@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import { deleteExpense } from "../api/expenseApi";
+import { deleteExpense, editExpense } from "../api/expenseApi";
 
 const ExpenseList = ({ expenses, setExpenses }) => {
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({});
 
   const handleEdit = (expense) => {
-    setEditingId(expense.id);
+    setEditingId(expense._id);
     setEditData({ ...expense });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    const response = await editExpense(editingId, editData);
     setExpenses((prevExpenses) =>
       prevExpenses.map((expense) =>
-        expense.id === editingId ? editData : expense
+        expense._id === editingId ? response.data : expense
       )
     );
     setEditingId(null);
@@ -31,8 +32,6 @@ const ExpenseList = ({ expenses, setExpenses }) => {
       setExpenses((prevExpenses) =>
         prevExpenses.filter((expense) => expense._id !== id)
       );
-
-      console.log(`Expense with ID ${id} deleted successfully`);
     } catch (error) {
       console.error("Error deleting expense:", error);
     }
@@ -64,7 +63,7 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                 className={`border-b transition ${
                   index % 2 === 0 ? "bg-gray-100" : "bg-white"
                 } hover:bg-gray-200`}>
-                {editingId === expense.id ? (
+                {editingId === expense._id ? (
                   <>
                     <td className="py-4 px-4 text-center">
                       <input
@@ -116,23 +115,19 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                     <td className="py-4 px-6 flex justify-center space-x-2">
                       <button
                         onClick={handleSave}
-                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition">
-                        ✅ Save
+                        className="bg-green-500 cursor-pointer hover:bg-green-600 text-white px-6 py-2 rounded transition">
+                        Save
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded transition">
-                        ❌ Cancel
+                        className="bg-gray-400 cursor-pointer hover:bg-gray-500 text-white px-4 py-2 rounded transition">
+                        Cancel
                       </button>
                     </td>
                   </>
                 ) : (
                   <>
-                    <td className="py-4 px-4 text-center">
-                      {new Date(expense.date)
-                        .toLocaleDateString("en-GB")
-                        .replace(/\//g, "-")}
-                    </td>
+                    <td className="py-4 px-4 text-center">{expense.date}</td>
                     <td className="py-4 px-4 text-center">
                       {expense.category}
                     </td>
@@ -145,13 +140,13 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                     <td className="py-4 px-6 flex justify-center space-x-2">
                       <button
                         onClick={() => handleEdit(expense)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition">
-                        ✏️ Edit
+                        className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white px-6 py-2 rounded transition">
+                        Edit
                       </button>
                       <button
                         onClick={() => handleDelete(expense._id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
-                        🗑️ Delete
+                        className="bg-red-500 cursor-pointer hover:bg-red-600 text-white px-4 py-2 rounded transition">
+                        Delete
                       </button>
                     </td>
                   </>

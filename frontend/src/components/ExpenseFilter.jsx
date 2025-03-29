@@ -5,12 +5,12 @@ const ExpenseFilter = ({ filter, setFilter }) => {
     setFilter({ ...filter, category: e.target.value });
   };
 
-  const handleDateChange = (e) => {
-    setFilter({ ...filter, date: e.target.value });
+  const handleSortChange = (e) => {
+    setFilter({ ...filter, sortByAmount: e.target.value });
   };
 
   const resetFilters = () => {
-    setFilter({ category: "", date: "" });
+    setFilter({ category: "", sortByAmount: "" });
   };
 
   return (
@@ -29,12 +29,15 @@ const ExpenseFilter = ({ filter, setFilter }) => {
           <option value="Others">📌 Others</option>
         </select>
 
-        <input
-          type="date"
-          value={filter.date}
-          onChange={handleDateChange}
+        <select
+          value={filter.sortByAmount}
+          onChange={handleSortChange}
           className="px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400 transition"
-        />
+        >
+          <option value="">💰 Sort by Amount</option>
+          <option value="asc">⬆️ Lowest to Highest</option>
+          <option value="desc">⬇️ Highest to Lowest</option>
+        </select>
       </div>
 
       <button
