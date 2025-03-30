@@ -30,10 +30,15 @@ const getMonthlySummary = async (req, res) => {
     const summary = await Expense.aggregate([
       { $match: { _id: { $in: user.expenses } } },
       {
+        $addFields: {
+          convertedDate: { $toDate: "$date" }
+        }
+      },
+      {
         $group: {
           _id: {
-            year: { $year: "$date" },
-            month: { $month: "$date" },
+            year: { $year: "$convertedDate" },
+            month: { $month: "$convertedDate" },
           },
           totalSpent: { $sum: "$amount" },
         },
@@ -156,9 +161,14 @@ const getSpendingTrends = async (req, res) => {
     const summary = await Expense.aggregate([
       { $match: { _id: { $in: user.expenses } } },
       {
+        $addFields: {
+          convertedDate: { $toDate: "$date" }
+        }
+      },
+      {
         $group: {
           _id: {
-            $dateToString: { format: "%d-%m-%Y", date: "$date" },
+            $dateToString: { format: "%d-%m-%Y", date: "$convertedDate" },
           },
           totalSpent: { $sum: "$amount" },
         },

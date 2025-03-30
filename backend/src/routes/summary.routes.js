@@ -4,8 +4,8 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 
 const summaryRouter = express.Router();
 
-summaryRouter.post("/monthly", authMiddleware, getMonthlySummary);
-summaryRouter.post("/category", authMiddleware, getCategorySummary);
-summaryRouter.post("/timeline", authMiddleware, getSpendingTrends);
+summaryRouter.get("/monthly", authMiddleware, getMonthlySummary);
+summaryRouter.get("/category", authMiddleware, getCategorySummary);
+summaryRouter.get("/timeline", authMiddleware, getSpendingTrends);
 
 export default summaryRouter;

@@ -5,8 +5,8 @@ import authMiddleware from "../middlewares/auth.middleware.js";
 const expenseRouter = express.Router();
 
 expenseRouter.post("/create-expense", authMiddleware, createExpense);
-expenseRouter.post("/delete-expense/:id", authMiddleware, deleteExpense);
+expenseRouter.delete("/delete-expense/:id", authMiddleware, deleteExpense);
 expenseRouter.get("/get-expenses", authMiddleware, getExpenses);
-expenseRouter.post("/edit-expense/:id", authMiddleware, editExpense);
+expenseRouter.put("/edit-expense/:id", authMiddleware, editExpense);
 
 export default expenseRouter;

@@ -34,17 +34,14 @@ const createExpense = async (req, res) => {
       });
     }
 
-    const [year, month, day] = date.split("-");
-    const formattedDate = `${year}-${month}-${day}`;
-
     const userID = req.user.id;
 
     const existingExpense = await Expense.findOne({
       amount,
       category,
-      date: formattedDate,
+      date,
       description,
-      user: userID
+      user: userID,
     });
 
     if (existingExpense) {
@@ -52,14 +49,14 @@ const createExpense = async (req, res) => {
         success: true,
         message: "Expense already exists",
         data: existingExpense,
-        isDuplicate: true
+        isDuplicate: true,
       });
     }
 
     const expense = await Expense.create({
       amount,
       category,
-      date: formattedDate,
+      date,
       description,
       user: userID,
     });
@@ -166,7 +163,6 @@ const editExpense = async (req, res) => {
 
     const { amount, category, date, description } = req.body;
 
-    // Validate amount if provided
     if (amount !== undefined) {
       if (amount <= 0) {
         return res.status(400).json({
@@ -182,19 +178,16 @@ const editExpense = async (req, res) => {
     }
 
     if (date) {
-      const dateFormatRegex = /^\d{2}-\d{2}-\d{4}$/;
+      const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
 
       if (!dateFormatRegex.test(date)) {
         return res.status(400).json({
           success: false,
-          message: "Invalid date format. Use DD-MM-YYYY",
+          message: "Invalid date format. Use YYYY-MM-DD",
         });
       }
 
-      const [day, month, year] = date.split("-");
-      const formattedDate = `${year}-${month}-${day}`;
-
-      expense.date = formattedDate;
+      expense.date = date;
     }
 
     if (description) {
