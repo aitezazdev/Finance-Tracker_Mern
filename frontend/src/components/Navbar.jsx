@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between px-12 py-4 bg-gray-900 shadow-md text-white">
+    <nav className="flex fixed top-0 z-50 w-full items-center justify-between px-12 py-4 bg-gray-900 shadow-md text-white">
       <Link to="/" className="text-3xl font-extrabold tracking-wide flex items-center space-x-2">
         <span>💰</span>
         <span>Expense Tracker</span>

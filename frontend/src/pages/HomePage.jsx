@@ -34,7 +34,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 relative">
+    <div className="min-h-screen bg-gray-100 p-8 relative pt-24">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-4xl font-bold text-gray-800">📊 Your Expenses</h1>
         <button
