@@ -34,12 +34,12 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 relative pt-24">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-4xl font-bold text-gray-800">📊 Your Expenses</h1>
+    <div className="min-h-screen bg-gray-100 p-4 sm:p-8 relative pt-24 sm:pt-24">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">📊 Your Expenses</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-full text-lg font-medium shadow-lg transition"
+          className="flex items-center justify-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white py-2 sm:py-3 px-4 sm:px-6 rounded-full text-base sm:text-lg font-medium shadow-lg transition w-full sm:w-auto"
           title="Add Expense">
           <span className="text-xl">➕</span>
           <span>Add New Expense</span>

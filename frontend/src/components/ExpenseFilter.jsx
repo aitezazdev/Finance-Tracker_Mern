@@ -14,12 +14,12 @@ const ExpenseFilter = ({ filter, setFilter }) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md">
-      <div className="flex space-x-4">
+    <div className="flex flex-col w-full sm:flex-row sm:items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md">
+      <div className="flex md:space-x-4 space-x-1">
         <select
           value={filter.category}
           onChange={handleCategoryChange}
-          className="px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400 transition"
+          className="md:px-4 py-3 border w-1/2 text-sm md:text-base rounded-lg outline-none focus:ring-2 focus:ring-blue-400 transition"
         >
           <option value="">📂 All Categories</option>
           <option value="Food">🍔 Food</option>
@@ -32,7 +32,7 @@ const ExpenseFilter = ({ filter, setFilter }) => {
         <select
           value={filter.sortByAmount}
           onChange={handleSortChange}
-          className="px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400 transition"
+          className="md:px-4 py-3 w-1/2 md:text-base text-sm border rounded-lg outline-none focus:ring-2 focus:ring-blue-400 transition"
         >
           <option value="">💰 Sort by Amount</option>
           <option value="asc">⬆️ Lowest to Highest</option>

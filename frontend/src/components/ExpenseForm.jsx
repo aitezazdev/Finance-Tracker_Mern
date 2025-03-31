@@ -51,10 +51,10 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Amount
+          Amount <span className="text-red-600">*</span>
         </label>
         <input
           type="number"
@@ -65,12 +65,12 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
         />
       </div>
-      <p>
+      <p className="mb-3">
         {errors.amount && <span className="text-red-500">{errors.amount}</span>}
       </p>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Category
+          Category <span className="text-red-600">*</span>
         </label>
         <select
           name="category"
@@ -86,7 +86,7 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
           <option value="Shopping">Shopping</option>
           <option value="Others">Others</option>
         </select>
-        <p>
+        <p className="mb-3">
           {errors.category && (
             <span className="text-red-500">{errors.category}</span>
           )}
@@ -94,7 +94,7 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Date
+          Date <span className="text-red-600">*</span>
         </label>
         <input
           type="date"
@@ -104,16 +104,16 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
         />
       </div>
-      <p>
+      <p className="mb-3">
         {errors.date && <span className="text-red-500">{errors.date}</span>}
       </p>
-      <div>
+      <div className="mb-3">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Description
         </label>
         <input
           type="text"
-          name="description"
+          name="description" autoComplete="off"
           value={formData.description}
           onChange={handleChange}
           placeholder="Optional description"
