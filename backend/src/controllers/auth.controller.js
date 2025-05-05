@@ -41,7 +41,7 @@ const register = async (req, res) => {
         id: createUser._id,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "2d" }
     );
 
     const { password: _, ...user } = createUser.toObject();

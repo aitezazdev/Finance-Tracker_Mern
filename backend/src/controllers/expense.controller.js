@@ -117,32 +117,6 @@ const deleteExpense = async (req, res) => {
   }
 };
 
-// get all expenses
-const getExpenses = async (req, res) => {
-  try {
-    const userID = req.user.id;
-
-    const expenses = await Expense.find({ user: userID });
-
-    if (!expenses) {
-      return res.status(404).json({
-        success: false,
-        message: "Expenses not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: expenses,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message || "something went wrong!",
-    });
-  }
-};
-
 // edit an expense
 const editExpense = async (req, res) => {
   try {
@@ -200,6 +174,32 @@ const editExpense = async (req, res) => {
       success: true,
       message: "Expense updated successfully",
       data: expense,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "something went wrong!",
+    });
+  }
+};
+
+// get all expenses
+const getExpenses = async (req, res) => {
+  try {
+    const userID = req.user.id;
+
+    const expenses = await Expense.find({ user: userID });
+
+    if (!expenses) {
+      return res.status(404).json({
+        success: false,
+        message: "Expenses not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: expenses,
     });
   } catch (error) {
     res.status(500).json({
