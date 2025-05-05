@@ -18,23 +18,17 @@ api.interceptors.request.use((config) => {
 // monthly summary
 export const getMonthlySummary = async () => {
   const response = await api.get("/monthly");
-  console.log(response.data);
-  
   return response.data;
 };
 
 // category summary
 export const getCategorySummary = async () => {
   const response = await api.get("/category");
-  console.log(response.data);
-  
   return response.data;
 };
 
 // spending trends
 export const getSpendingTrends = async () => {
   const response = await api.get("/timeline");
-  console.log(response.data);
-  
   return response.data;
 };

@@ -36,7 +36,6 @@ const ExpenseList = ({ expenses, setExpenses }) => {
     }
   };
 
-  // Card view for mobile
   const renderMobileView = () => {
     return (
       <div className="md:hidden space-y-4">
@@ -46,10 +45,9 @@ const ExpenseList = ({ expenses, setExpenses }) => {
           </div>
         ) : (
           expenses.map((expense) => (
-            <div
+            <div  
               key={expense._id}
-              className="bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500"
-            >
+              className="bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500">
               {editingId === expense._id ? (
                 <div className="space-y-3">
                   <div className="flex flex-col">
@@ -64,7 +62,9 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <label className="text-sm text-gray-600 mb-1">Category</label>
+                    <label className="text-sm text-gray-600 mb-1">
+                      Category
+                    </label>
                     <select
                       value={editData.category}
                       onChange={(e) =>
@@ -74,15 +74,20 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                         })
                       }
                       className="w-full px-3 py-2 border rounded">
-                      <option value="Food">🍔 Food</option>
-                      <option value="Transport">🚕 Transport</option>
-                      <option value="Entertainment">🎬 Entertainment</option>
-                      <option value="Bills">📜 Bills</option>
-                      <option value="Others">📌 Others</option>
+                      <option value="">Select category</option>
+                      <option value="Food">Food</option>
+                      <option value="Transport">Transport</option>
+                      <option value="Entertainment">Entertainment</option>
+                      <option value="Bills">Bills</option>
+                      <option value="Health">Health</option>
+                      <option value="Shopping">Shopping</option>
+                      <option value="Others">Others</option>
                     </select>
                   </div>
                   <div className="flex flex-col">
-                    <label className="text-sm text-gray-600 mb-1">Description</label>
+                    <label className="text-sm text-gray-600 mb-1">
+                      Description
+                    </label>
                     <input
                       type="text"
                       value={editData.description}
@@ -96,7 +101,9 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <label className="text-sm text-gray-600 mb-1">Amount ($)</label>
+                    <label className="text-sm text-gray-600 mb-1">
+                      Amount (Rs. )
+                    </label>
                     <input
                       type="number"
                       value={editData.amount}
@@ -125,15 +132,19 @@ const ExpenseList = ({ expenses, setExpenses }) => {
               ) : (
                 <>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-bold text-lg">${expense.amount}</span>
-                    <span className="text-sm text-gray-500">{expense.date}</span>
+                    <span className="font-bold text-lg">Rs. {expense.amount}</span>
+                    <span className="text-sm text-gray-500">
+                      {expense.date}
+                    </span>
                   </div>
                   <div className="flex items-center mb-2">
                     <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
                       {expense.category}
                     </span>
                   </div>
-                  <p className="text-gray-700 mb-3">{expense.description || "—"}</p>
+                  <p className="text-gray-700 mb-3">
+                    {expense.description || "—"}
+                  </p>
                   <div className="flex justify-end space-x-2">
                     <button
                       onClick={() => handleEdit(expense)}
@@ -155,18 +166,17 @@ const ExpenseList = ({ expenses, setExpenses }) => {
     );
   };
 
-  // Table view for desktop
   const renderDesktopView = () => {
     return (
       <div className="hidden md:block overflow-y-auto max-h-[500px] border rounded-lg">
         <table className="min-w-full bg-white rounded-lg">
           <thead className="bg-gray-900 text-white text-lg uppercase sticky top-0">
             <tr className="text-center">
-              <th className="py-4 px-6">📅 Date</th>
-              <th className="py-4 px-6">📂 Category</th>
-              <th className="py-4 px-6">📝 Description</th>
-              <th className="py-4 px-6">💵 Amount ($)</th>
-              <th className="py-4 px-6">⚙️ Actions</th>
+              <th className="py-4 px-6">Date</th>
+              <th className="py-4 px-6">Category</th>
+              <th className="py-4 px-6">Description</th>
+              <th className="py-4 px-6">Amount (Rs)</th>
+              <th className="py-4 px-6">Actions</th>
             </tr>
           </thead>
           <tbody className="text-gray-700 text-md">
@@ -177,10 +187,10 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                 </td>
               </tr>
             ) : (
-              expenses.map((expense, index) => (
+              expenses.map((expense) => (
                 <tr
                   key={expense._id}
-                  className={`border-b transition ${
+                  className={`border-b transition Rs. {
                     index % 2 === 0 ? "bg-gray-100" : "bg-white"
                   } hover:bg-gray-200`}>
                   {editingId === expense._id ? (
@@ -205,11 +215,14 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                             })
                           }
                           className="w-full px-3 py-2 border rounded">
-                          <option value="Food">🍔 Food</option>
-                          <option value="Transport">🚕 Transport</option>
-                          <option value="Entertainment">🎬 Entertainment</option>
-                          <option value="Bills">📜 Bills</option>
-                          <option value="Others">📌 Others</option>
+                          <option value="">Select category</option>
+                          <option value="Food">Food</option>
+                          <option value="Transport">Transport</option>
+                          <option value="Entertainment">Entertainment</option>
+                          <option value="Bills">Bills</option>
+                          <option value="Health">Health</option>
+                          <option value="Shopping">Shopping</option>
+                          <option value="Others">Others</option>
                         </select>
                       </td>
                       <td className="py-4 px-4 text-center">
@@ -261,7 +274,7 @@ const ExpenseList = ({ expenses, setExpenses }) => {
                         {expense.description || "—"}
                       </td>
                       <td className="py-4 px-4 text-center font-semibold">
-                        ${expense.amount}
+                        Rs. {expense.amount}
                       </td>
                       <td className="py-4 px-6 flex justify-center space-x-2">
                         <button
