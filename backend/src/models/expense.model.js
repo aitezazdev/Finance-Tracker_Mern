@@ -6,6 +6,11 @@ const expenseSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    currency: {
+      type: String,
+      enum: ["PKR", "USD", "EUR", "GBP", "INR", "AED", "CNY"],
+      default: "PKR",
+    },
     category: {
       type: String,
       required: true,

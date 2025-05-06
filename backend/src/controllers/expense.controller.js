@@ -1,16 +1,18 @@
 import Expense from "../models/expense.model.js";
 import User from "../models/user.model.js";
+import { getExchangeRate } from "../utils/exchangeRate.js";
 
 // create expense
 const createExpense = async (req, res) => {
   try {
-    const { amount, category, date, description } = req.body;
+    const { amount, currency = "PKR", category, date, description } = req.body;
     if (!amount || amount <= 0) {
       return res.status(400).json({
         success: false,
         message: "amount cannot be negative",
       });
     }
+
     if (!category) {
       return res.status(400).json({
         success: false,
@@ -38,6 +40,7 @@ const createExpense = async (req, res) => {
 
     const existingExpense = await Expense.findOne({
       amount,
+      currency,
       category,
       date,
       description,
@@ -120,6 +123,7 @@ const deleteExpense = async (req, res) => {
 // edit an expense
 const editExpense = async (req, res) => {
   try {
+    const { amount, currency, category, date, description } = req.body;
     const { id } = req.params;
     if (!id) {
       return res.status(400).json({
@@ -135,8 +139,6 @@ const editExpense = async (req, res) => {
       });
     }
 
-    const { amount, category, date, description } = req.body;
-
     if (amount !== undefined) {
       if (amount <= 0) {
         return res.status(400).json({
@@ -145,6 +147,27 @@ const editExpense = async (req, res) => {
         });
       }
       expense.amount = amount;
+    }
+
+    if (currency == expense.currency) {
+      return res.status(400).json({
+        success: false,
+        message: "your are going same currency conversion",
+      });
+    }
+
+    if (currency && currency != expense.currency) {
+      const rate = await getExchangeRate(expense.currency, currency);
+
+      if (!rate) {
+        return res.status(400).json({
+          success: false,
+          message: "failed to fetch currency exchange",
+        });
+      }
+
+      expense.amount = rate * expense.amount;
+      expense.currency = currency;
     }
 
     if (category) {
