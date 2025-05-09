@@ -27,6 +27,14 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
     if (!formData.category) newErrors.category = "Category is required";
     if (!formData.date) newErrors.date = "Date is required";
 
+    if (formData.amount && formData.amount <= 0) {
+      newErrors.amount = "Amount must be greater than zero";
+    }
+
+    if (new Date(formData.date) > new Date()) {
+      newErrors.date = "Date cannot be in the future";
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -113,7 +121,8 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
         </label>
         <input
           type="text"
-          name="description" autoComplete="off"
+          name="description"
+          autoComplete="off"
           value={formData.description}
           onChange={handleChange}
           placeholder="Optional description"

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store/Slices/authSlice';
+import React, { useState, useEffect, useRef } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../store/Slices/authSlice";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
@@ -12,7 +12,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/login');
+    navigate("/login");
     setIsMenuOpen(false);
   };
 
@@ -27,43 +27,56 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     }
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     };
   }, [isMenuOpen]);
 
   return (
     <>
       <nav className="flex fixed top-0 z-40 w-full items-center justify-between px-4 md:px-12 py-4 bg-gray-900 shadow-md text-white">
-        <Link to="/" className="text-xl md:text-3xl font-extrabold tracking-wide flex items-center space-x-2">
-          <span>💰</span>
+        <NavLink
+          to="/"
+          className="text-xl md:text-3xl font-extrabold tracking-wide flex items-center space-x-2">
           <span>Expense Tracker</span>
-        </Link>
+        </NavLink>
 
         <ul className="hidden md:flex items-center space-x-6 text-lg font-medium">
           {user && (
             <>
               <li>
-                <Link to="/" className="hover:text-gray-300 transition duration-200">
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `hover:text-gray-300 transition duration-200 ${
+                      isActive && `border-b-2 border-b-blue-600`
+                    }`
+                  }>
                   Home
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/summary" className="hover:text-gray-300 transition duration-200">
+                <NavLink
+                  to="/summary"
+                  className={({ isActive }) =>
+                    `hover:text-gray-300 transition duration-200 ${
+                      isActive && `border-b-2 border-b-blue-600`
+                    }`
+                  }>
                   Summary
-                </Link>
+                </NavLink>
               </li>
             </>
           )}
@@ -72,48 +85,68 @@ const Navbar = () => {
         <div className="hidden md:flex items-center space-x-6">
           {user ? (
             <>
-              <span className="text-gray-400">👋 Welcome, {user.name}</span>
-              <button 
-                onClick={handleLogout} 
-                className="bg-red-500 px-5 py-2 rounded-full hover:bg-red-600 transition duration-200 shadow-md"
-              >
+              <span className="text-gray-400">Welcome, {user.name}</span>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 px-5 py-2 rounded-full hover:bg-red-600 transition duration-200 shadow-md">
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-600 transition duration-200 shadow-md">
+              <NavLink
+                to="/login"
+                className="bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-600 transition duration-200 shadow-md">
                 Login
-              </Link>
+              </NavLink>
             </>
           )}
         </div>
 
-        <button 
+        <button
           onClick={toggleMenu}
           className="md:hidden p-2"
-          aria-label="Toggle menu"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          aria-label="Toggle menu">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </nav>
 
-      <div 
+      <div
         ref={menuRef}
-        className={`fixed top-0 right-0 w-3/4 h-full bg-white z-50 shadow-xl transform transition-transform duration-500 ease-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-      >
+        className={`fixed top-0 right-0 w-3/4 h-full bg-white z-50 shadow-xl transform transition-transform duration-500 ease-out ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}>
         <div className="flex flex-col h-full p-6">
           <div className="flex justify-between items-center mb-8">
             <span className="text-xl font-bold text-gray-800">Menu</span>
-            <button 
+            <button
               onClick={toggleMenu}
               className="text-gray-600 p-2"
-              aria-label="Close menu"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              aria-label="Close menu">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -122,44 +155,46 @@ const Navbar = () => {
             <>
               <div className="mb-6 p-4 bg-gray-100 rounded-lg">
                 <span className="text-gray-500 block mb-2">Logged in as</span>
-                <span className="text-gray-800 font-medium text-lg">👋 {user.name}</span>
+                <span className="text-gray-800 font-medium text-lg">
+                  👋 {user.name}
+                </span>
               </div>
-              
+
               <ul className="space-y-4 mb-auto">
                 <li>
-                  <Link to="/" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) => {
+                      `block py-3 px-4 text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200`;
+                    }}
+                    onClick={() => setIsMenuOpen(false)}>
                     Home
-                  </Link>
+                  </NavLink>
                 </li>
                 <li>
-                  <Link to="/summary" 
+                  <NavLink
+                    to="/summary"
                     className="block py-3 px-4 text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
+                    onClick={() => setIsMenuOpen(false)}>
                     Summary
-                  </Link>
+                  </NavLink>
                 </li>
               </ul>
-              
-              <button 
-                onClick={handleLogout} 
-                className="mt-6 w-full bg-red-500 py-3 rounded-lg hover:bg-red-600 transition-all duration-200 shadow-md text-white font-medium"
-              >
+
+              <button
+                onClick={handleLogout}
+                className="mt-6 w-full bg-red-500 py-3 rounded-lg hover:bg-red-600 transition-all duration-200 shadow-md text-white font-medium">
                 Logout
               </button>
             </>
           ) : (
             <div className="mt-auto mb-6 w-full">
-              <Link 
-                to="/login" 
+              <NavLink
+                to="/login"
                 className="block w-full text-center bg-blue-500 py-3 rounded-lg hover:bg-blue-600 transition-all duration-200 shadow-md text-white font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
+                onClick={() => setIsMenuOpen(false)}>
                 Login
-              </Link>
+              </NavLink>
             </div>
           )}
         </div>

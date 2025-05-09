@@ -71,7 +71,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="w-full flex items-center pt-5 justify-center bg-gray-50">
+    <div className="w-full flex items-center pt-5 mt-20 justify-center bg-gray-50">
       <div className="w-full max-w-md px-6">
         <form
           onSubmit={handleSubmit}
@@ -98,7 +98,7 @@ const RegisterPage = () => {
             </div>
           )}
 
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div>
               <label
                 htmlFor="name"
