@@ -5,7 +5,7 @@ import { getExchangeRate } from "../utils/exchangeRate.js";
 // create expense
 const createExpense = async (req, res) => {
   try {
-    const { amount, currency = "PKR", category, date, description } = req.body;
+    const { amount, category, date, description } = req.body;
     if (!amount || amount <= 0) {
       return res.status(400).json({
         success: false,
@@ -36,11 +36,20 @@ const createExpense = async (req, res) => {
       });
     }
 
+    const parsedDate = new Date(date);
+    const currrentDate = new Date();
+
+    if(parsedDate.getTime() > currrentDate.getTime()) {
+      return res.status(400).json({
+        success: false,
+        message: "Date cannot be in the future",
+      });
+    }
+
     const userID = req.user.id;
 
     const existingExpense = await Expense.findOne({
       amount,
-      currency,
       category,
       date,
       description,
@@ -123,7 +132,7 @@ const deleteExpense = async (req, res) => {
 // edit an expense
 const editExpense = async (req, res) => {
   try {
-    const { amount, currency, category, date, description } = req.body;
+    const { amount, category, date, description } = req.body;
     const { id } = req.params;
     if (!id) {
       return res.status(400).json({
@@ -147,27 +156,6 @@ const editExpense = async (req, res) => {
         });
       }
       expense.amount = amount;
-    }
-
-    if (currency == expense.currency) {
-      return res.status(400).json({
-        success: false,
-        message: "your are going same currency conversion",
-      });
-    }
-
-    if (currency && currency != expense.currency) {
-      const rate = await getExchangeRate(expense.currency, currency);
-
-      if (!rate) {
-        return res.status(400).json({
-          success: false,
-          message: "failed to fetch currency exchange",
-        });
-      }
-
-      expense.amount = rate * expense.amount;
-      expense.currency = currency;
     }
 
     if (category) {
