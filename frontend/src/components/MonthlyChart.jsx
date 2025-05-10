@@ -8,20 +8,17 @@ const MonthlyChart = ({ data }) => {
     
     return {
       month: `${monthName} ${item._id.year}`,
-      amount: item.totalSpent
+      amount: item.totalSpent,
+      yearValue: item._id.year,
+      monthValue: item._id.month  
     };
   });
 
   chartData.sort((a, b) => {
-    const [aMonth, aYear] = a.month.split(' ');
-    const [bMonth, bYear] = b.month.split(' ');
-    
-    if (aYear === bYear) {
-      const monthOrder = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      return monthOrder.indexOf(aMonth) - monthOrder.indexOf(bMonth);
+    if (a.yearValue !== b.yearValue) {
+      return a.yearValue - b.yearValue;
     }
-    
-    return parseInt(aYear) - parseInt(bYear);
+    return a.monthValue - b.monthValue;
   });
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -81,19 +78,19 @@ const MonthlyChart = ({ data }) => {
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
               <p className="text-sm text-blue-700 mb-1">Highest Month</p>
               <p className="text-lg font-semibold">
-                {chartData.sort((a, b) => b.amount - a.amount)[0]?.month || "N/A"}
+                {chartData.slice().sort((a, b) => b.amount - a.amount)[0]?.month || "N/A"}
               </p>
               <p className="text-gray-600 text-sm">
-                ${chartData.sort((a, b) => b.amount - a.amount)[0]?.amount.toLocaleString() || "0"}
+                ${chartData.slice().sort((a, b) => b.amount - a.amount)[0]?.amount.toLocaleString() || "0"}
               </p>
             </div>
             <div className="bg-green-50 p-4 rounded-lg border border-green-100">
               <p className="text-sm text-green-700 mb-1">Lowest Month</p>
               <p className="text-lg font-semibold">
-                {chartData.sort((a, b) => a.amount - b.amount)[0]?.month || "N/A"}
+                {chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.month || "N/A"}
               </p>
               <p className="text-gray-600 text-sm">
-                ${chartData.sort((a, b) => a.amount - b.amount)[0]?.amount.toLocaleString() || "0"}
+                ${chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.amount.toLocaleString() || "0"}
               </p>
             </div>
             <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
