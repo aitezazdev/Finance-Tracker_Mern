@@ -168,13 +168,13 @@ const getSpendingTrends = async (req, res) => {
       {
         $group: {
           _id: {
-            $dateToString: { format: "%d-%m-%Y", date: "$convertedDate" },
+            $dateTrunc: { date: "$convertedDate", unit: "day" },
           },
           totalSpent: { $sum: "$amount" },
         },
       },
       { $sort: { _id: 1 } },
-    ]);
+    ]); 
 
     return res.status(200).json({
       success: true,
