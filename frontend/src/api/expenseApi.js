@@ -36,6 +36,7 @@ export const deleteExpense = async (id) => {
   return response.data;
 }
 
+// edit expense
 export const editExpense = async (id, editData) => {
   const response = await api.put(`/edit-expense/${id}`, editData);
   return response.data;

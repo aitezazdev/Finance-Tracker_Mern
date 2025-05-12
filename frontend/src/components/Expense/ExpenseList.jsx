@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { deleteExpense, editExpense } from "../api/expenseApi";
+import { deleteExpense, editExpense } from "../../api/expenseApi";
 
 const ExpenseList = ({ expenses, setExpenses }) => {
   const [editingId, setEditingId] = useState(null);

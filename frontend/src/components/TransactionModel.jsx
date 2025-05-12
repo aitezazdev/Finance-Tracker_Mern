@@ -1,7 +1,7 @@
 import React from "react";
-import ExpenseForm from "./ExpenseForm";
+import TransactionForm from "./TransactionForm";
 
-const ExpenseModal = ({ show, onClose, setExpenses }) => {
+const TransactionModal = ({ show, onClose, setExpenses, setIncomes, setActiveTab }) => {
   if (!show) return null;
 
   return (
@@ -19,10 +19,10 @@ const ExpenseModal = ({ show, onClose, setExpenses }) => {
         <h2 className="text-xl sm:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
           Add New Transaction
         </h2>
-        <ExpenseForm onClose={onClose} setExpenses={setExpenses} />
+        <TransactionForm onClose={onClose} setExpenses={setExpenses} setIncomes={setIncomes} setActiveTab={setActiveTab} />
       </div>
     </div>
   );
 };
 
-export default ExpenseModal;
+export default TransactionModal;

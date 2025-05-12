@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { addExpense } from "../api/expenseApi";
+import { addIncome } from "../api/incomeApi";
 
-const TransactionForm = ({ onClose, setExpenses }) => {
+const TransactionForm = ({ onClose, setExpenses, setIncomes, setActiveTab }) => {
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
-    type: "expense", // default is expense
+    type: "expense",
     amount: "",
     category: "",
     date: "",
@@ -17,7 +18,7 @@ const TransactionForm = ({ onClose, setExpenses }) => {
     "Investment",
     "Refund",
     "Gift",
-    "Other Income",
+    "Others",
   ];
 
   const expenseCategories = [
@@ -67,8 +68,26 @@ const TransactionForm = ({ onClose, setExpenses }) => {
     }
 
     try {
+      if (formData.type === "income") {
+        const response = await addIncome(formData);
+        setIncomes((prev) => [response.data, ...prev]);
+        setActiveTab("Incomes");
+
+        setFormData({
+          type: "income",
+          amount: "",
+          category: "",
+          date: "",
+          description: "",
+        });
+
+        setErrors({});
+        onClose();
+        return;
+      }
       const response = await addExpense(formData);
       setExpenses((prev) => [response.data, ...prev]);
+      setActiveTab("Expenses");
 
       setFormData({
         type: "expense",
