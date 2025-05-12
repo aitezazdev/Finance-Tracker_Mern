@@ -81,7 +81,7 @@ const TrendsChart = ({ data }) => {
 
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
-              <p className="text-sm text-purple-700 mb-1">Highest Month</p>
+              <p className="text-sm text-purple-700 mb-1">Highest Day</p>
               <p className="text-lg font-semibold">
                 {chartData.slice().sort((a, b) => b.amount - a.amount)[0]?.date || "N/A"}
               </p>
@@ -90,7 +90,7 @@ const TrendsChart = ({ data }) => {
               </p>
             </div>
             <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
-              <p className="text-sm text-indigo-700 mb-1">Lowest Month</p>
+              <p className="text-sm text-indigo-700 mb-1">Lowest Day</p>
               <p className="text-lg font-semibold">
                 {chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.date || "N/A"}
               </p>
@@ -98,12 +98,12 @@ const TrendsChart = ({ data }) => {
                 ${chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.amount.toLocaleString() || "0"}
               </p>
             </div>
-            <div className="bg-violet-50 p-4 rounded-lg border border-violet-100">
+            {/* <div className="bg-violet-50 p-4 rounded-lg border border-violet-100">
               <p className="text-sm text-violet-700 mb-1">Monthly Average</p>
               <p className="text-lg font-semibold">
                 ${(chartData.reduce((sum, item) => sum + item.amount, 0) / chartData.length).toFixed(2)}
               </p>
-            </div>
+            </div> */}
           </div>
         </>
       )}

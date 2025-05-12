@@ -1,22 +1,48 @@
 import React, { useState } from "react";
 import { addExpense } from "../api/expenseApi";
 
-const ExpenseForm = ({ onClose, setExpenses }) => {
+const TransactionForm = ({ onClose, setExpenses }) => {
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
+    type: "expense", // default is expense
     amount: "",
     category: "",
     date: "",
     description: "",
   });
 
+  const incomeCategories = [
+    "Salary",
+    "Freelance",
+    "Investment",
+    "Refund",
+    "Gift",
+    "Other Income",
+  ];
+
+  const expenseCategories = [
+    "Food",
+    "Transport",
+    "Entertainment",
+    "Bills",
+    "Health",
+    "Shopping",
+    "Others",
+  ];
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setFormData({ ...formData, [name]: value });
 
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [e.target.name]: "",
+      [name]: "",
     }));
+
+    if (name === "type") {
+      setFormData((prev) => ({ ...prev, category: "" }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -42,9 +68,10 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
 
     try {
       const response = await addExpense(formData);
-      setExpenses((prevExpenses) => [response.data, ...prevExpenses]);
+      setExpenses((prev) => [response.data, ...prev]);
 
       setFormData({
+        type: "expense",
         amount: "",
         category: "",
         date: "",
@@ -54,12 +81,30 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
       setErrors({});
       onClose();
     } catch (error) {
-      console.error("Error adding expense:", error);
+      console.error("Error adding transaction:", error);
     }
   };
 
+  const availableCategories =
+    formData.type === "income" ? incomeCategories : expenseCategories;
+
   return (
     <form onSubmit={handleSubmit} className="">
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Type <span className="text-red-600">*</span>
+        </label>
+        <select
+          name="type"
+          value={formData.type}
+          onChange={handleChange}
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+        >
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
+        </select>
+      </div>
+
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Amount <span className="text-red-600">*</span>
@@ -72,10 +117,9 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
           placeholder="Enter amount"
           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
         />
+        <p className="mb-3 text-red-500">{errors.amount}</p>
       </div>
-      <p className="mb-3">
-        {errors.amount && <span className="text-red-500">{errors.amount}</span>}
-      </p>
+
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Category <span className="text-red-600">*</span>
@@ -84,22 +128,18 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
           name="category"
           value={formData.category}
           onChange={handleChange}
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all">
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+        >
           <option value="">Select category</option>
-          <option value="Food">Food</option>
-          <option value="Transport">Transport</option>
-          <option value="Entertainment">Entertainment</option>
-          <option value="Bills">Bills</option>
-          <option value="Health">Health</option>
-          <option value="Shopping">Shopping</option>
-          <option value="Others">Others</option>
+          {availableCategories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
         </select>
-        <p className="mb-3">
-          {errors.category && (
-            <span className="text-red-500">{errors.category}</span>
-          )}
-        </p>
+        <p className="mb-3 text-red-500">{errors.category}</p>
       </div>
+
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Date <span className="text-red-600">*</span>
@@ -111,10 +151,9 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
           onChange={handleChange}
           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
         />
+        <p className="mb-3 text-red-500">{errors.date}</p>
       </div>
-      <p className="mb-3">
-        {errors.date && <span className="text-red-500">{errors.date}</span>}
-      </p>
+
       <div className="mb-3">
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Description
@@ -129,13 +168,15 @@ const ExpenseForm = ({ onClose, setExpenses }) => {
           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
         />
       </div>
+
       <button
         type="submit"
-        className="w-full bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-3 rounded-xl shadow-lg hover:opacity-90 transition-all">
-        Add Expense
+        className="w-full bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-3 rounded-xl shadow-lg hover:opacity-90 transition-all"
+      >
+        Add {formData.type === "income" ? "Income" : "Expense"}
       </button>
     </form>
   );
 };
 
-export default ExpenseForm;
+export default TransactionForm;

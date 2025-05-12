@@ -54,54 +54,39 @@ const Navbar = () => {
         </NavLink>
 
         <ul className="hidden md:flex items-center space-x-6 text-lg font-medium">
-          {user && (
-            <>
-              <li>
-                <NavLink
-                  to="/"
-                  className={({ isActive }) =>
-                    `hover:text-gray-300 transition duration-200 ${
-                      isActive && `border-b-2 border-b-blue-600`
-                    }`
-                  }>
-                  Home
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/summary"
-                  className={({ isActive }) =>
-                    `hover:text-gray-300 transition duration-200 ${
-                      isActive && `border-b-2 border-b-blue-600`
-                    }`
-                  }>
-                  Summary
-                </NavLink>
-              </li>
-            </>
-          )}
-        </ul>
-
-        <div className="hidden md:flex items-center space-x-6">
-          {user ? (
-            <>
-              <span className="text-gray-400">Welcome, {user.name}</span>
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 px-5 py-2 rounded-full hover:bg-red-600 transition duration-200 shadow-md">
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
+          <>
+            <li>
               <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `hover:text-gray-300 transition duration-200 ${
+                    isActive && `border-b-2 border-b-cyan-600`
+                  }`
+                }>
+                Home
+              </NavLink>
+            </li>
+            <li>
+              {user ? (
+                <NavLink
+                  to="/dashboard"
+                  className={({ isActive }) =>
+                    `hover:text-gray-300 transition duration-200 ${
+                      isActive && `border-b-2 border-b-cyan-600`
+                    }`
+                  }>
+                  Dashboard
+                </NavLink>
+              ) : (
+                <NavLink
                 to="/login"
                 className="bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-600 transition duration-200 shadow-md">
                 Login
               </NavLink>
-            </>
-          )}
-        </div>
+              )}
+            </li>
+          </>
+        </ul>
 
         <button
           onClick={toggleMenu}
