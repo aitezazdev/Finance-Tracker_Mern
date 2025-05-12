@@ -1,22 +1,49 @@
-import Expense from "../models/expense.model.js";
 import User from "../models/user.model.js";
 
-// for monthly summary
-const getMonthlySummary = async (req, res) => {
+// total income
+const calculateIncome = async (req, res) => {
   try {
-    const userID = req.user.id;
-    if (!userID) {
-      return res.status(404).json({
-        success: false,
-        message: "user id not found",
-      });
-    }
-
-    const user = await User.findById(userID).select("name email expenses");
+    const userId = req.user.id;
+    const user = await User.findById(userId).populate("incomes");
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "user not found",
+      });
+    }
+
+    if (!user.incomes || user.incomes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "no incomes found for this user",
+      });
+    }
+
+    const totalIncome = user.incomes.reduce(
+      (total, income) => total + income.amount,
+      0
+    );
+    return res.status(200).json({
+      success: true,
+      data: totalIncome,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "something went wrong!",
+    });
+  }
+};
+
+// total expense
+const calculateExpense = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId).populate("expenses");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "user not found",
       });
     }
 
@@ -27,41 +54,13 @@ const getMonthlySummary = async (req, res) => {
       });
     }
 
-    const summary = await Expense.aggregate([
-      { $match: { _id: { $in: user.expenses } } },
-      {
-        $addFields: {
-          convertedDate: { $toDate: "$date" }
-        }
-      },
-      {
-        $group: {
-          _id: {
-            year: { $year: "$convertedDate" },
-            month: { $month: "$convertedDate" },
-          },
-          totalSpent: { $sum: "$amount" },
-        },
-      },
-      { $sort: { "_id.year": -1, "_id.month": -1 } },
-    ]);
-
-    if (summary.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "no summary found",
-      });
-    }
-
+    const totalExpense = user.expenses.reduce(
+      (total, expense) => total + expense.amount,
+      0
+    );
     return res.status(200).json({
       success: true,
-      message: "summary for the user found successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-      data: summary,
+      data: totalExpense,
     });
   } catch (error) {
     return res.status(500).json({
@@ -71,22 +70,22 @@ const getMonthlySummary = async (req, res) => {
   }
 };
 
-// for category wise summary
-const getCategorySummary = async (req, res) => {
+// net balance
+const netBalance = async (req, res) => {
   try {
-    const userID = req.user.id;
-    if (!userID) {
-      return res.status(404).json({
-        success: false,
-        message: "user id not found",
-      });
-    }
-
-    const user = await User.findById(userID).select("name email expenses");
+    const userId = req.user.id;
+    const user = await User.findById(userId).populate("incomes").populate("expenses");
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "user not found",
+      });
+    }
+
+    if (!user.incomes || user.incomes.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "no incomes found for this user",
       });
     }
 
@@ -97,103 +96,26 @@ const getCategorySummary = async (req, res) => {
       });
     }
 
-    const summary = await Expense.aggregate([
-      { $match: { _id: { $in: user.expenses } } },
+    const totalIncome = user.incomes.reduce(
+      (total, income) => total + income.amount,
+      0
+    );
+    const totalExpense = user.expenses.reduce(
+      (total, expense) => total + expense.amount,
+      0
+    );
+    return res.status(200).json(
       {
-        $group: {
-          _id: {
-            category: "$category",
-          },
-          totalSpent: { $sum: "$amount" },
-        },
-      },
-      {
-        $sort: {
-          totalSpent: -1,
-        },
-      },
-    ]);
-
-    if (summary.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "no summary found",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: "summary for the user found successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-      data: summary,
-    });
+        success: true,
+        data: totalIncome - totalExpense,
+      }
+    )
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: error.message || "something went wrong!",
-    });
-  }
-};
-
-// for daily trends
-const getSpendingTrends = async (req, res) => {
-  try {
-    const userID = req.user.id;
-    if (!userID) {
-      return res.status(404).json({
-        success: false,
-        message: "user id not found",
-      });
-    }
-
-    const user = await User.findById(userID).select("name email expenses");
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    const summary = await Expense.aggregate([
-      { $match: { _id: { $in: user.expenses } } },
-      {
-        $addFields: {
-          convertedDate: { $toDate: "$date" }
-        }
-      },
-      {
-        $group: {
-          _id: {
-            $dateTrunc: { date: "$convertedDate", unit: "day" },
-          },
-          totalSpent: { $sum: "$amount" },
-        },
-      },
-      { $sort: { _id: 1 } },
-    ]); 
-
-    return res.status(200).json({
-      success: true,
-      message: "summary for the user found successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-      data: summary,
     })
-
-
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "something went wrong!",
-    });
   }
-};
+}
 
-export { getMonthlySummary, getCategorySummary, getSpendingTrends };
+export { calculateIncome, calculateExpense, netBalance };
