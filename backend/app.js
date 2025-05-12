@@ -5,6 +5,7 @@ import cors from "cors";
 import authRouter from "./src/routes/auth.routes.js";
 import expenseRouter from "./src/routes/expense.routes.js";
 import summaryRouter from "./src/routes/summary.routes.js";
+import incomeRouter from "./src/routes/income.routes.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRouter);
 app.use("/api", expenseRouter);
+app.use("/api", incomeRouter);
 app.use("/api/summary", summaryRouter);
 
 app.listen(3000, () => {

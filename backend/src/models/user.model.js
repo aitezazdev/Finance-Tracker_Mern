@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema(
         ref: "Expense",
       },
     ],
+    incomes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Income",
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -1,8 +1,8 @@
-import Expense from "../models/expense.model.js";
+import Income from "../models/income.model.js";
 import User from "../models/user.model.js";
 
-// create expense
-const createExpense = async (req, res) => {
+// create Income
+const createIncome = async (req, res) => {
   try {
     const { amount, category, date, description } = req.body;
     if (!amount || amount <= 0) {
@@ -47,7 +47,7 @@ const createExpense = async (req, res) => {
 
     const userID = req.user.id;
 
-    const existingExpense = await Expense.findOne({
+    const existingIncome = await Income.findOne({
       amount,
       category,
       date,
@@ -55,16 +55,16 @@ const createExpense = async (req, res) => {
       user: userID,
     });
 
-    if (existingExpense) {
+    if (existingIncome) {
       return res.status(200).json({
         success: true,
-        message: "Expense already exists",
-        data: existingExpense,
+        message: "Income already exists",
+        data: existingIncome,
         isDuplicate: true,
       });
     }
 
-    const expense = await Expense.create({
+    const income = await Income.create({
       amount,
       category,
       date,
@@ -74,14 +74,14 @@ const createExpense = async (req, res) => {
 
     const user = await User.findById(userID);
     if (user) {
-      user.expenses.push(expense._id);
+      user.incomes.push(income._id);
       await user.save();
     }
 
     res.status(201).json({
       success: true,
-      message: "expense created successfully",
-      data: expense,
+      message: "Income created successfully",
+      data: Income,
     });
   } catch (error) {
     res.status(500).json({
@@ -91,8 +91,8 @@ const createExpense = async (req, res) => {
   }
 };
 
-// delete expense
-const deleteExpense = async (req, res) => {
+// delete Income
+const deleteIncome = async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) {
@@ -101,24 +101,24 @@ const deleteExpense = async (req, res) => {
         message: "id is required",
       });
     }
-    const expense = await Expense.findById(id);
-    if (!expense) {
+    const income = await Income.findById(id);
+    if (!income) {
       return res.status(404).json({
         success: false,
-        message: "Expense not found",
+        message: "Income not found",
       });
     }
 
-    await User.findByIdAndUpdate(expense.user, {
-      $pull: { expenses: id },
+    await User.findByIdAndUpdate(income.user, {
+      $pull: { incomes: id },
     });
 
-    await Expense.findByIdAndDelete(id);
+    await Income.findByIdAndDelete(id);
 
     res.status(200).json({
       success: true,
-      message: "Expense deleted successfully",
-      data: expense,
+      message: "Income deleted successfully",
+      data: income,
     });
   } catch (error) {
     return res.status(500).json({
@@ -128,8 +128,8 @@ const deleteExpense = async (req, res) => {
   }
 };
 
-// edit an expense
-const editExpense = async (req, res) => {
+// edit an Income
+const editIncome = async (req, res) => {
   try {
     const { amount, category, date, description } = req.body;
     const { id } = req.params;
@@ -139,11 +139,11 @@ const editExpense = async (req, res) => {
         message: "id is required",
       });
     }
-    const expense = await Expense.findById(id);
-    if (!expense) {
+    const income = await Income.findById(id);
+    if (!income) {
       return res.status(404).json({
         success: false,
-        message: "Expense not found",
+        message: "Income not found",
       });
     }
 
@@ -154,11 +154,11 @@ const editExpense = async (req, res) => {
           message: "Amount must be greater than zero",
         });
       }
-      expense.amount = amount;
+      income.amount = amount;
     }
 
     if (category) {
-      expense.category = category;
+      income.category = category;
     }
 
     if (date) {
@@ -171,19 +171,19 @@ const editExpense = async (req, res) => {
         });
       }
 
-      expense.date = date;
+      income.date = date;
     }
 
     if (description) {
-      expense.description = description;
+      income.description = description;
     }
 
-    await expense.save();
+    await income.save();
 
     res.status(200).json({
       success: true,
-      message: "Expense updated successfully",
-      data: expense,
+      message: "Income updated successfully",
+      data: income,
     });
   } catch (error) {
     res.status(500).json({
@@ -193,23 +193,23 @@ const editExpense = async (req, res) => {
   }
 };
 
-// get all expenses
-const getExpenses = async (req, res) => {
+// get all Incomes
+const getIncomes = async (req, res) => {
   try {
     const userID = req.user.id;
 
-    const expenses = await Expense.find({ user: userID });
+    const Incomes = await Income.find({ user: userID });
 
-    if (!expenses) {
+    if (!Incomes) {
       return res.status(404).json({
         success: false,
-        message: "Expenses not found",
+        message: "Incomes not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      data: expenses,
+      data: Incomes,
     });
   } catch (error) {
     res.status(500).json({
@@ -219,4 +219,4 @@ const getExpenses = async (req, res) => {
   }
 };
 
-export { createExpense, deleteExpense, getExpenses, editExpense };
+export { createIncome, deleteIncome, getIncomes, editIncome };
