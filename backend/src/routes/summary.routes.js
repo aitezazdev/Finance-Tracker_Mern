@@ -1,11 +1,10 @@
 import express from "express";
-import { calculateIncome, calculateExpense, netBalance } from "../controllers/summary.controller.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
+import { getFinancialSummary, getRecentTransactions } from "../controllers/summary.controller.js";
 
 const summaryRouter = express.Router();
 
-summaryRouter.get("/incomes-report", authMiddleware, calculateIncome);
-summaryRouter.get("/expenses-report", authMiddleware, calculateExpense);
-summaryRouter.get("/net-balance-report", authMiddleware, netBalance);
+summaryRouter.get("/financial-report", authMiddleware, getFinancialSummary);
+summaryRouter.get("/recent-transactions", authMiddleware, getRecentTransactions);
 
 export default summaryRouter;
