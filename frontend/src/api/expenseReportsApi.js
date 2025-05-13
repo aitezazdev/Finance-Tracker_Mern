@@ -15,17 +15,20 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// finanacial summary
-export const getFinancialSummary = async () => {
-  const response = await api.get("/financial-report");
-  console.log(response.data);
-  
+// monthly summary
+export const getMonthlySummary = async () => {
+  const response = await api.get("/monthly");
   return response.data;
 };
 
-// 5 recent transactions
-export const getRecentTransactions = async () => {
-  const response = await api.get("/recent-transactions");
-  console.log(response.data);
+// category summary
+export const getCategorySummary = async () => {
+  const response = await api.get("/category");
+  return response.data;
+};
+
+// spending trends
+export const getSpendingTrends = async () => {
+  const response = await api.get("/timeline");
   return response.data;
 };

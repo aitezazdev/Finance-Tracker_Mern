@@ -3,7 +3,7 @@ import {
   getMonthlySummary,
   getCategorySummary,
   getSpendingTrends,
-} from "../api/summaryApi";
+} from "../api/expenseReportsApi";
 import MonthlyChart from "../components/MonthlyChart";
 import CategoryChart from "../components/CategoryChart";
 import TrendsChart from "../components/TrendsChart";

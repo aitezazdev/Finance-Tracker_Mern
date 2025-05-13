@@ -1,15 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useSelector } from "react-redux";
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashBoard from "./pages/DashBoard";
-import SummaryPage from "./pages/SummaryPage";
+import ExpenseReport from "./pages/ExpenseReport";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HomePage from "./pages/HomePage";
+import Transactions from "./pages/Transactions";
+import { getExpenses } from "./api/expenseApi";
+import { getIncomes } from "./api/incomeApi";
 
 const App = () => {
+  const [expenses, setExpenses] = useState([]);
+  const [incomes, setIncomes] = useState([]);
+  const [activeTab, setActiveTab] = useState("Expenses");
+   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const response = await getExpenses();
+        setExpenses(response.data);
+        console.log("Expenses fetched:", response.data);
+      } catch (error) {
+        console.error("Error fetching expenses:", error);
+        setExpenses([]);
+      }
+    };
+
+    fetchExpenses();
+  }, []);
+
+  useEffect(() => {
+    const fetchIncomes = async () => {
+      try {
+        const response = await getIncomes();
+        setIncomes(response.data);
+        console.log("Incomes fetched:", response.data);
+      } catch (error) {
+        console.error("Error fetching expenses:", error);
+        setIncomes([]);
+      }
+    };
+
+    fetchIncomes();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -18,9 +55,10 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        <Route element={<ProtectedRoute />}>zz
-          <Route path="/dashboard" element={<DashBoard />} />
-          <Route path="/analytics" element={<SummaryPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashBoard expenses={expenses} incomes={incomes} showModal={showModal} setShowModal={setShowModal} setExpenses={setExpenses} setIncomes={setIncomes} setActiveTab={setActiveTab}  />} />
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/analytics" element={<ExpenseReport />} />
         </Route>
       </Routes>
     </>

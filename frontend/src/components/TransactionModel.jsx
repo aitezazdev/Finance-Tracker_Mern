@@ -1,7 +1,7 @@
 import React from "react";
 import TransactionForm from "./TransactionForm";
 
-const TransactionModal = ({ show, onClose, setExpenses, setIncomes, setActiveTab }) => {
+const TransactionModal = ({ show, onClose, setExpenses="", setIncomes="", setActiveTab="" }) => {
   if (!show) return null;
 
   return (

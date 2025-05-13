@@ -4,21 +4,20 @@ import {
   FaHome,
   FaPlusCircle,
   FaChartPie,
-  FaUserCog,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { BiTransferAlt } from "react-icons/bi";
+import { useDispatch } from "react-redux";
 import { logout } from "../store/Slices/authSlice";
 
 const navItems = [
   { name: "Dashboard", icon: FaHome, path: "/dashboard" },
   { name: "Add Transaction", icon: FaPlusCircle, path: "#", isModal: true },
+  { name: "Transactions", icon: BiTransferAlt, path: "/transactions" },
   { name: "Analytics", icon: FaChartPie, path: "/analytics" },
-  { name: "Settings", icon: FaUserCog, path: "/settings" },
 ];
 
 const Sidebar = ({ setShowModal }) => {
-  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
