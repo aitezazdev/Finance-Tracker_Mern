@@ -1,8 +1,8 @@
-import Expense from "../models/expense.model.js";
+import Income from "../models/income.model.js";
 import User from "../models/user.model.js";
 
 // for monthly summary
-const getExpenseMonthlySummary = async (req, res) => {
+const getIncomeMonthlySummary = async (req, res) => {
   try {
     const userID = req.user.id;
     if (!userID) {
@@ -12,7 +12,7 @@ const getExpenseMonthlySummary = async (req, res) => {
       });
     }
 
-    const user = await User.findById(userID).select("name email expenses");
+    const user = await User.findById(userID).select("name email incomes");
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -20,15 +20,15 @@ const getExpenseMonthlySummary = async (req, res) => {
       });
     }
 
-    if (!user.expenses || user.expenses.length === 0) {
+    if (!user.incomes || user.incomes.length === 0) {
       return res.status(404).json({
         success: false,
-        message: "no expenses found for this user",
+        message: "no incomes found for this user",
       });
     }
 
-    const summary = await Expense.aggregate([
-      { $match: { _id: { $in: user.expenses } } },
+    const summary = await Income.aggregate([
+      { $match: { _id: { $in: user.incomes } } },
       {
         $addFields: {
           convertedDate: { $toDate: "$date" }
@@ -40,7 +40,7 @@ const getExpenseMonthlySummary = async (req, res) => {
             year: { $year: "$convertedDate" },
             month: { $month: "$convertedDate" },
           },
-          totalSpent: { $sum: "$amount" },
+          totalIncome: { $sum: "$amount" },
         },
       },
       { $sort: { "_id.year": -1, "_id.month": -1 } },
@@ -72,7 +72,7 @@ const getExpenseMonthlySummary = async (req, res) => {
 };
 
 // for category wise summary
-const getExpenseCategorySummary = async (req, res) => {
+const getIncomeCategorySummary = async (req, res) => {
   try {
     const userID = req.user.id;
     if (!userID) {
@@ -82,7 +82,7 @@ const getExpenseCategorySummary = async (req, res) => {
       });
     }
 
-    const user = await User.findById(userID).select("name email expenses");
+    const user = await User.findById(userID).select("name email incomes");
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -90,26 +90,26 @@ const getExpenseCategorySummary = async (req, res) => {
       });
     }
 
-    if (!user.expenses || user.expenses.length === 0) {
+    if (!user.incomes || user.incomes.length === 0) {
       return res.status(404).json({
         success: false,
-        message: "no expenses found for this user",
+        message: "no incomes found for this user",
       });
     }
 
-    const summary = await Expense.aggregate([
-      { $match: { _id: { $in: user.expenses } } },
+    const summary = await Income.aggregate([
+      { $match: { _id: { $in: user.incomes } } },
       {
         $group: {
           _id: {
             category: "$category",
           },
-          totalSpent: { $sum: "$amount" },
+          totalIncome: { $sum: "$amount" },
         },
       },
       {
         $sort: {
-          totalSpent: -1,
+          totalIncome: -1,
         },
       },
     ]);
@@ -140,7 +140,7 @@ const getExpenseCategorySummary = async (req, res) => {
 };
 
 // for daily trends
-const getExpenseSpendingTrends = async (req, res) => {
+const getIncomeSpendingTrends = async (req, res) => {
   try {
     const userID = req.user.id;
     if (!userID) {
@@ -150,7 +150,7 @@ const getExpenseSpendingTrends = async (req, res) => {
       });
     }
 
-    const user = await User.findById(userID).select("name email expenses");
+    const user = await User.findById(userID).select("name email incomes");
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -158,8 +158,8 @@ const getExpenseSpendingTrends = async (req, res) => {
       });
     }
 
-    const summary = await Expense.aggregate([
-      { $match: { _id: { $in: user.expenses } } },
+    const summary = await Income.aggregate([
+      { $match: { _id: { $in: user.incomes } } },
       {
         $addFields: {
           convertedDate: { $toDate: "$date" }
@@ -170,7 +170,7 @@ const getExpenseSpendingTrends = async (req, res) => {
           _id: {
             $dateTrunc: { date: "$convertedDate", unit: "day" },
           },
-          totalSpent: { $sum: "$amount" },
+          totalIncome: { $sum: "$amount" },
         },
       },
       { $sort: { _id: 1 } },
@@ -196,4 +196,4 @@ const getExpenseSpendingTrends = async (req, res) => {
   }
 };
 
-export { getExpenseMonthlySummary, getExpenseCategorySummary, getExpenseSpendingTrends };
+export { getIncomeMonthlySummary, getIncomeCategorySummary, getIncomeSpendingTrends };

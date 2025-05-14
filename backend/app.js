@@ -7,6 +7,7 @@ import expenseRouter from "./src/routes/expense.routes.js";
 import expenseReport from "./src/routes/expenseReport.routes.js";
 import incomeRouter from "./src/routes/income.routes.js";
 import summaryRouter from "./src/routes/summary.routes.js";
+import incomeReportRouter from "./src/routes/incomeReport.routes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/auth", authRouter);
 app.use("/api", expenseRouter);
 app.use("/api", incomeRouter);
 app.use("/api/summary", expenseReport);
+app.use("/api/summary", incomeReportRouter);
 app.use("/api/summary", summaryRouter);
 
 app.listen(3000, () => {
