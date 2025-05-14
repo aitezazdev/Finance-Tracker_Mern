@@ -1,16 +1,16 @@
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const MonthlyChart = ({ data }) => {
+const IncomeMonthlyChart = ({ data }) => {
   const chartData = data.map(item => {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const monthName = monthNames[item._id.month - 1];
     
     return {
       month: `${monthName} ${item._id.year}`,
-      amount: item.totalSpent,
+      amount: item.totalIncome,
       yearValue: item._id.year,
-      monthValue: item._id.month  
+      monthValue: item._id.month
     };
   });
 
@@ -43,7 +43,7 @@ const MonthlyChart = ({ data }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           <p className="text-lg font-medium">No monthly data available</p>
-          <p className="text-sm mt-1">Add some expenses to see your monthly spending pattern</p>
+          <p className="text-sm mt-1">Add some incomes to see your monthly spending pattern</p>
         </div>
       ) : (
         <>
@@ -106,4 +106,4 @@ const MonthlyChart = ({ data }) => {
   );
 };
 
-export default MonthlyChart;
+export default IncomeMonthlyChart;

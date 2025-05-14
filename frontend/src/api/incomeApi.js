@@ -25,8 +25,6 @@ export const getIncomes = async () => {
 // create an income
 export const addIncome = async (income) => {
   const response = await api.post("/create-income", income);
-  console.log(response.data);
-
   return response.data;
 };
 

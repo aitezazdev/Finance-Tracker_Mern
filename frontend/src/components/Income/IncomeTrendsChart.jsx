@@ -1,7 +1,7 @@
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const TrendsChart = ({ data }) => {
+const IncomeTrendsChart = ({ data }) => {
   const hasValidData = Array.isArray(data) && data.length > 0;
   
   const chartData = hasValidData 
@@ -15,7 +15,7 @@ const TrendsChart = ({ data }) => {
       return {
         date: `${day} ${monthNames[month]} ${year}`,
         timestamp: parsedDate.getTime(),
-        amount: typeof item.totalSpent === 'number' ? item.totalSpent : 0
+        amount: typeof item.totalIncome === 'number' ? item.totalIncome : 0
       };
 
     })
@@ -111,4 +111,4 @@ const TrendsChart = ({ data }) => {
   );
 };
 
-export default TrendsChart;
+export default IncomeTrendsChart;

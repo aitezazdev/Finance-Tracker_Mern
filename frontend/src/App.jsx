@@ -4,12 +4,12 @@ import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashBoard from "./pages/DashBoard";
-import ExpenseReport from "./pages/ExpenseReport";
 import ProtectedRoute from "./components/ProtectedRoute";
 import HomePage from "./pages/HomePage";
 import Transactions from "./pages/Transactions";
 import { getExpenses } from "./api/expenseApi";
 import { getIncomes } from "./api/incomeApi";
+import AnalyticsPage from "./pages/AnalyticsPage";
 
 const App = () => {
   const [expenses, setExpenses] = useState([]);
@@ -22,7 +22,6 @@ const App = () => {
       try {
         const response = await getExpenses();
         setExpenses(response.data);
-        console.log("Expenses fetched:", response.data);
       } catch (error) {
         console.error("Error fetching expenses:", error);
         setExpenses([]);
@@ -37,7 +36,6 @@ const App = () => {
       try {
         const response = await getIncomes();
         setIncomes(response.data);
-        console.log("Incomes fetched:", response.data);
       } catch (error) {
         console.error("Error fetching expenses:", error);
         setIncomes([]);
@@ -58,7 +56,7 @@ const App = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashBoard expenses={expenses} incomes={incomes} showModal={showModal} setShowModal={setShowModal} setExpenses={setExpenses} setIncomes={setIncomes} setActiveTab={setActiveTab}  />} />
           <Route path="/transactions" element={<Transactions />} />
-          <Route path="/analytics" element={<ExpenseReport />} />
+          <Route path="/analytics" element={<AnalyticsPage />} />
         </Route>
       </Routes>
     </>

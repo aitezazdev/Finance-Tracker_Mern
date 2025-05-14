@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
-import {
-  getMonthlySummary,
-  getCategorySummary,
-  getSpendingTrends,
-} from "../api/expenseReportsApi";
-import MonthlyChart from "../components/MonthlyChart";
-import CategoryChart from "../components/CategoryChart";
-import TrendsChart from "../components/TrendsChart";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../Sidebar";
 import {
   FaDollarSign,
   FaChartBar,
   FaMedal,
   FaCalendarAlt,
 } from "react-icons/fa";
+import { getIncomeCategorySummary, getIncomeMonthlySummary, getIncomeSpendingTrends } from "../../api/incomeReportsApi";
+import IncomeMonthlyChart from "./IncomeMonthlyChart";
+import IncomeCategoryChart from "./IncomeCategoryChart";
+import IncomeTrendsChart from "./IncomeTrendsChart";
 
-const SummaryPage = () => {
+const IncomeReport = () => {
   const [monthlyData, setMonthlyData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [trendsData, setTrendsData] = useState([]);
@@ -30,9 +26,9 @@ const SummaryPage = () => {
         setLoading(true);
         const [monthlyResponse, categoryResponse, trendsResponse] =
           await Promise.all([
-            getMonthlySummary(),
-            getCategorySummary(),
-            getSpendingTrends(),
+            getIncomeMonthlySummary(),
+            getIncomeCategorySummary(),
+            getIncomeSpendingTrends(),
           ]);
 
         if (monthlyResponse.success) setMonthlyData(monthlyResponse.data);
@@ -61,9 +57,9 @@ const SummaryPage = () => {
 
   const summaryCards = [
     {
-      title: "Total Spending",
+      title: "Total Income",
       value: `$${monthlyData
-        .reduce((sum, item) => sum + item.totalSpent, 0)
+        .reduce((sum, item) => sum + item.totalIncome, 0)
         .toLocaleString()}`,
       icon: <FaDollarSign className="text-2xl text-blue-600" />,
       color: "bg-blue-50 border-blue-200",
@@ -73,7 +69,7 @@ const SummaryPage = () => {
       value: `$${
         monthlyData.length > 0
           ? (
-              monthlyData.reduce((sum, item) => sum + item.totalSpent, 0) /
+              monthlyData.reduce((sum, item) => sum + item.totalIncome, 0) /
               monthlyData.length
             ).toFixed(2)
           : 0
@@ -85,7 +81,7 @@ const SummaryPage = () => {
       title: "Top Category",
       value:
         categoryData.length > 0
-          ? categoryData.sort((a, b) => b.totalSpent - a.totalSpent)[0]?._id
+          ? categoryData.sort((a, b) => b.totalIncome - a.totalIncome)[0]?._id
               ?.category || "N/A"
           : "N/A",
       icon: <FaMedal className="text-2xl text-green-600" />,
@@ -100,26 +96,18 @@ const SummaryPage = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-50 pt-16">
+    <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
 
-      <div className="flex-1 ml-0 md:ml-64">
-        <div className="p-4 sm:p-6 lg:p-8 pt-28">
-          <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold text-center sm:text-left">
-              Expense Summary Dashboard
-            </h1>
-            <p className="mt-2 text-center sm:text-left">
-              Track and analyze your spending patterns
-            </p>
-          </div>
+      <div className="w-full">
+        <div className="">
 
           {loading ? (
             <div className="flex flex-1 items-center justify-center h-64">
               <div className="animate-pulse flex flex-col items-center">
                 <div className="h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                 <p className="mt-4 text-gray-600">
-                  Loading your expense data...
+                  Loading your income data...
                 </p>
               </div>
             </div>
@@ -174,7 +162,7 @@ const SummaryPage = () => {
                         ? "border-b-2 border-blue-500 text-blue-600"
                         : "text-gray-500 hover:text-gray-700"
                     }`}>
-                    Monthly Expenses
+                    Monthly Income
                   </button>
                   <button
                     onClick={() => setActiveTab("category")}
@@ -210,7 +198,7 @@ const SummaryPage = () => {
                     <div>
                       <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-semibold text-gray-800">
-                          Monthly Expenses
+                          Monthly Income
                         </h2>
                         <select
                           className="border rounded-md px-3 py-1.5 bg-white text-sm"
@@ -224,25 +212,25 @@ const SummaryPage = () => {
                           ))}
                         </select>
                       </div>
-                      <MonthlyChart data={filteredMonthlyData} />
+                      <IncomeMonthlyChart data={filteredMonthlyData} />
                     </div>
                   )}
 
                   {activeTab === "category" && (
                     <div>
                       <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                        Expenses by Category
+                        Incomes by Category
                       </h2>
-                      <CategoryChart data={categoryData} />
+                      <IncomeCategoryChart data={categoryData} />
                     </div>
                   )}
 
                   {activeTab === "trends" && (
                     <div>
                       <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                        Daily Spending Trends
+                        Daily Income Trends
                       </h2>
-                      <TrendsChart data={trendsData} />
+                      <IncomeTrendsChart data={trendsData} />
                     </div>
                   )}
 
@@ -250,7 +238,7 @@ const SummaryPage = () => {
                     <div>
                       <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-semibold text-gray-800">
-                          Monthly Expense Data
+                          Monthly Income Data
                         </h2>
                       </div>
 
@@ -266,7 +254,7 @@ const SummaryPage = () => {
                               <th
                                 scope="col"
                                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Total Spent
+                                Total Income
                               </th>
                             </tr>
                           </thead>
@@ -298,7 +286,7 @@ const SummaryPage = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                       <div className="text-sm font-semibold text-gray-900">
-                                        ${item.totalSpent.toLocaleString()}
+                                        ${item.totalIncome.toLocaleString()}
                                       </div>
                                     </td>
                                   </tr>
@@ -328,4 +316,4 @@ const SummaryPage = () => {
   );
 };
 
-export default SummaryPage;
+export default IncomeReport;

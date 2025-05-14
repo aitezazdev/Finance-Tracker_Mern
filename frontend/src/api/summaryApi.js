@@ -18,14 +18,11 @@ api.interceptors.request.use((config) => {
 // finanacial summary
 export const getFinancialSummary = async () => {
   const response = await api.get("/financial-report");
-  console.log(response.data);
-  
   return response.data;
 };
 
 // 5 recent transactions
 export const getRecentTransactions = async () => {
   const response = await api.get("/recent-transactions");
-  console.log(response.data);
   return response.data;
 };

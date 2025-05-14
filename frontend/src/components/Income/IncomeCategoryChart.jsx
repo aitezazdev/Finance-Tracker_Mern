@@ -1,10 +1,10 @@
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const CategoryChart = ({ data }) => {
+const IncomeCategoryChart = ({ data }) => {
   const chartData = data.map(item => ({
     name: item._id.category,
-    value: item.totalSpent
+    value: item.totalIncome
   })).sort((a, b) => b.value - a.value);
 
   return (
@@ -22,4 +22,4 @@ const CategoryChart = ({ data }) => {
   );
 };
 
-export default CategoryChart;
+export default IncomeCategoryChart;
