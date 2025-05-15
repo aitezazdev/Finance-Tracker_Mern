@@ -30,7 +30,7 @@ const ExpenseTrendsChart = ({ data }) => {
         <div className="bg-white p-4 shadow-md rounded-lg border border-gray-200">
           <h4 className="font-medium text-gray-800 mb-2">{label}</h4>
           <p className="text-purple-600 font-medium text-lg">
-            ${payload[0].value.toLocaleString()}
+            Rs. {payload[0].value.toLocaleString()}
           </p>
         </div>
       );
@@ -56,15 +56,15 @@ const ExpenseTrendsChart = ({ data }) => {
               margin={{ top: 10, right: 30, left: 20, bottom: 70 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis 
+              <XAxis className="text-sm"
                 dataKey="date" 
                 angle={-45} 
                 textAnchor="end" 
                 height={70}
                 tick={{ fontSize: 12 }}
               />
-              <YAxis 
-                tickFormatter={(value) => `$${value.toLocaleString()}`}
+              <YAxis className="text-sm"
+                tickFormatter={(value) => `Rs.${value.toLocaleString()}`}
               />
               <Tooltip content={<CustomTooltip />} />
               <Line 
@@ -86,7 +86,7 @@ const ExpenseTrendsChart = ({ data }) => {
                 {chartData.slice().sort((a, b) => b.amount - a.amount)[0]?.date || "N/A"}
               </p>
               <p className="text-gray-600 text-sm">
-                ${chartData.slice().sort((a, b) => b.amount - a.amount)[0]?.amount.toLocaleString() || "0"}
+                Rs. {chartData.slice().sort((a, b) => b.amount - a.amount)[0]?.amount.toLocaleString() || "0"}
               </p>
             </div>
             <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
@@ -95,7 +95,7 @@ const ExpenseTrendsChart = ({ data }) => {
                 {chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.date || "N/A"}
               </p>
               <p className="text-gray-600 text-sm">
-                ${chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.amount.toLocaleString() || "0"}
+                Rs. {chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.amount.toLocaleString() || "0"}
               </p>
             </div>
             {/* <div className="bg-violet-50 p-4 rounded-lg border border-violet-100">

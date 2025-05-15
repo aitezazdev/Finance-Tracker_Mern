@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../Sidebar";
 import {
-  FaDollarSign,
   FaChartBar,
   FaMedal,
   FaCalendarAlt,
@@ -10,6 +9,7 @@ import { getIncomeCategorySummary, getIncomeMonthlySummary, getIncomeSpendingTre
 import IncomeMonthlyChart from "./IncomeMonthlyChart";
 import IncomeCategoryChart from "./IncomeCategoryChart";
 import IncomeTrendsChart from "./IncomeTrendsChart";
+import { FaRupeeSign } from "react-icons/fa6";
 
 const IncomeReport = () => {
   const [monthlyData, setMonthlyData] = useState([]);
@@ -58,15 +58,15 @@ const IncomeReport = () => {
   const summaryCards = [
     {
       title: "Total Income",
-      value: `$${monthlyData
+      value: `Rs. ${monthlyData
         .reduce((sum, item) => sum + item.totalIncome, 0)
         .toLocaleString()}`,
-      icon: <FaDollarSign className="text-2xl text-blue-600" />,
+      icon: <FaRupeeSign className="text-2xl text-blue-600" />,
       color: "bg-blue-50 border-blue-200",
     },
     {
       title: "Monthly Average",
-      value: `$${
+      value: `Rs. ${
         monthlyData.length > 0
           ? (
               monthlyData.reduce((sum, item) => sum + item.totalIncome, 0) /
@@ -180,7 +180,7 @@ const IncomeReport = () => {
                         ? "border-b-2 border-blue-500 text-blue-600"
                         : "text-gray-500 hover:text-gray-700"
                     }`}>
-                    Spending Trends
+                    Income Trends
                   </button>
                   <button
                     onClick={() => setActiveTab("data")}
@@ -286,7 +286,7 @@ const IncomeReport = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                       <div className="text-sm font-semibold text-gray-900">
-                                        ${item.totalIncome.toLocaleString()}
+                                        Rs. {item.totalIncome.toLocaleString()}
                                       </div>
                                     </td>
                                   </tr>

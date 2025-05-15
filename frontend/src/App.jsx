@@ -12,6 +12,8 @@ import { getIncomes } from "./api/incomeApi";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import { useSelector } from "react-redux";
 import Profile from "./pages/Profile";
+import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   const { user } = useSelector((state) => state.auth);
@@ -50,6 +52,8 @@ const App = () => {
 
   return (
     <>
+    <ToastContainer />
+      <Toaster />
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />

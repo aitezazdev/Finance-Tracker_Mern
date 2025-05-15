@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { addExpense } from "../api/expenseApi";
 import { addIncome } from "../api/incomeApi";
+import toast from "react-hot-toast";
 
 const TransactionForm = ({ onClose, setExpenses, setIncomes, setActiveTab }) => {
   const [errors, setErrors] = useState({});
@@ -70,6 +71,7 @@ const TransactionForm = ({ onClose, setExpenses, setIncomes, setActiveTab }) => 
     try {
       if (formData.type === "income") {
         const response = await addIncome(formData);
+        toast.success("Income added");
         setIncomes((prev) => [response.data, ...prev]);
         setActiveTab("Incomes");
 
@@ -86,6 +88,7 @@ const TransactionForm = ({ onClose, setExpenses, setIncomes, setActiveTab }) => 
         return;
       }
       const response = await addExpense(formData);
+      toast.success("Expense added");
       setExpenses((prev) => [response.data, ...prev]);
       setActiveTab("Expenses");
 
@@ -100,7 +103,7 @@ const TransactionForm = ({ onClose, setExpenses, setIncomes, setActiveTab }) => 
       setErrors({});
       onClose();
     } catch (error) {
-      console.error("Error adding transaction:", error);
+      toast.error("Error adding transaction");
     }
   };
 

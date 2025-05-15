@@ -6,6 +6,7 @@ import { MdOutlineError, MdOutlineEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { BiLoaderAlt } from "react-icons/bi";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -32,14 +33,15 @@ const LoginPage = () => {
 
     try {
       const result = await dispatch(loginUser(data)).unwrap();
+      toast.success("Login successful");
       setData({
         email: "",
         password: "",
       });
       setErrors({});
-
       navigate("/");
     } catch (error) {
+      toast.error("Login failed");
       setErrors((prevErrors) => ({
         ...prevErrors,
         backend: error || "Login failed, please try again",
@@ -66,18 +68,18 @@ const LoginPage = () => {
       <div className="w-full max-w-md px-6">
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow-xl rounded-xl px-8 pt-8 pb-10 border border-gray-200 transition-all"
-        >
+          className="bg-white shadow-xl rounded-xl px-8 pt-8 pb-10 border border-gray-200 transition-all">
           <div className="mb-8 text-center">
-            <h3 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h3>
+            <h3 className="text-3xl font-bold text-gray-800 mb-2">
+              Welcome Back
+            </h3>
             <p className="text-gray-600">Sign in to access your account</p>
           </div>
 
           {errors.backend && (
             <div
               className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded mb-6"
-              role="alert"
-            >
+              role="alert">
               <div className="flex">
                 <div className="py-1">
                   <MdOutlineError className="w-6 h-6 mr-4 text-red-500" />
@@ -91,8 +93,7 @@ const LoginPage = () => {
             <div>
               <label
                 htmlFor="email"
-                className="block text-gray-700 text-sm font-semibold mb-2"
-              >
+                className="block text-gray-700 text-sm font-semibold mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -111,7 +112,9 @@ const LoginPage = () => {
                 />
               </div>
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1 font-medium">{errors.email}</p>
+                <p className="text-red-500 text-sm mt-1 font-medium">
+                  {errors.email}
+                </p>
               )}
             </div>
 
@@ -119,8 +122,7 @@ const LoginPage = () => {
               <div className="flex items-center justify-between mb-2">
                 <label
                   htmlFor="password"
-                  className="block text-gray-700 text-sm font-semibold"
-                >
+                  className="block text-gray-700 text-sm font-semibold">
                   Password
                 </label>
               </div>
@@ -142,8 +144,7 @@ const LoginPage = () => {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900 focus:outline-none"
-                  tabIndex={-1}
-                >
+                  tabIndex={-1}>
                   {showPassword ? (
                     <AiFillEyeInvisible className="w-6 h-6 text-gray-500" />
                   ) : (
@@ -152,15 +153,16 @@ const LoginPage = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1 font-medium">{errors.password}</p>
+                <p className="text-red-500 text-sm mt-1 font-medium">
+                  {errors.password}
+                </p>
               )}
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-all disabled:opacity-70"
-            >
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-all disabled:opacity-70">
               {loading ? (
                 <span className="flex items-center">
                   <BiLoaderAlt className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
@@ -177,8 +179,7 @@ const LoginPage = () => {
               Don't have an account?{" "}
               <Link
                 to="/register"
-                className="text-blue-600 hover:text-blue-800 font-semibold"
-              >
+                className="text-blue-600 hover:text-blue-800 font-semibold">
                 Create account
               </Link>
             </p>

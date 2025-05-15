@@ -27,7 +27,7 @@ const IncomeMonthlyChart = ({ data }) => {
         <div className="bg-white p-4 shadow-md rounded-lg border border-gray-200">
           <h4 className="font-medium text-gray-800 mb-2">{label}</h4>
           <p className="text-blue-600 font-medium text-lg">
-            ${payload[0].payload.amount.toLocaleString()}
+            Rs. {payload[0].payload.amount.toLocaleString()}
           </p>
         </div>
       );
@@ -53,15 +53,15 @@ const IncomeMonthlyChart = ({ data }) => {
               margin={{ top: 10, right: 30, left: 20, bottom: 70 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis 
+              <XAxis className="text-sm"
                 dataKey="month" 
                 angle={-45} 
                 textAnchor="end" 
                 height={70} 
                 tick={{ fontSize: 12 }}
               />
-              <YAxis 
-                tickFormatter={(value) => `$${value.toLocaleString()}`}
+              <YAxis className="text-sm"
+                tickFormatter={(value) => `Rs.${value.toLocaleString()}`}
               />
               <Tooltip content={<CustomTooltip />} />
               <Bar 
@@ -81,7 +81,7 @@ const IncomeMonthlyChart = ({ data }) => {
                 {chartData.slice().sort((a, b) => b.amount - a.amount)[0]?.month || "N/A"}
               </p>
               <p className="text-gray-600 text-sm">
-                ${chartData.slice().sort((a, b) => b.amount - a.amount)[0]?.amount.toLocaleString() || "0"}
+                Rs. {chartData.slice().sort((a, b) => b.amount - a.amount)[0]?.amount.toLocaleString() || "0"}
               </p>
             </div>
             <div className="bg-green-50 p-4 rounded-lg border border-green-100">
@@ -90,13 +90,13 @@ const IncomeMonthlyChart = ({ data }) => {
                 {chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.month || "N/A"}
               </p>
               <p className="text-gray-600 text-sm">
-                ${chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.amount.toLocaleString() || "0"}
+                Rs. {chartData.slice().sort((a, b) => a.amount - b.amount)[0]?.amount.toLocaleString() || "0"}
               </p>
             </div>
             <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
               <p className="text-sm text-purple-700 mb-1">Monthly Average</p>
               <p className="text-lg font-semibold">
-                ${(chartData.reduce((sum, item) => sum + item.amount, 0) / chartData.length).toFixed(2)}
+                Rs. {(chartData.reduce((sum, item) => sum + item.amount, 0) / chartData.length).toFixed(2)}
               </p>
             </div>
           </div>

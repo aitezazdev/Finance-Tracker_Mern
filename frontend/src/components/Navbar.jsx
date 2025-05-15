@@ -73,7 +73,7 @@ const Navbar = () => {
         <NavLink
           to="/"
           className="text-xl md:text-3xl font-extrabold tracking-wide flex items-center space-x-2">
-          <span>Expense Tracker</span>
+          <span>Finance Tracker</span>
         </NavLink>
 
         <ul className="hidden md:flex items-center space-x-6 text-lg font-medium">

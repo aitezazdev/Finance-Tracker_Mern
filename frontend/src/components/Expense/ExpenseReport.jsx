@@ -6,11 +6,11 @@ import {
 } from "../../api/expenseReportsApi";
 import Sidebar from "../Sidebar";
 import {
-  FaDollarSign,
   FaChartBar,
   FaMedal,
   FaCalendarAlt,
 } from "react-icons/fa";
+import { FaRupeeSign } from "react-icons/fa6";
 import ExpenseMonthlyChart from "./ExpenseMonthlyChart";
 import ExpenseCategoryChart from "./ExpenseCategoryChart";
 import ExpenseTrendsChart from "./ExpenseTrendsChart";
@@ -62,15 +62,15 @@ const ExpenseReport = () => {
   const summaryCards = [
     {
       title: "Total Spending",
-      value: `$${monthlyData
+      value: `Rs. ${monthlyData
         .reduce((sum, item) => sum + item.totalSpent, 0)
         .toLocaleString()}`,
-      icon: <FaDollarSign className="text-2xl text-blue-600" />,
+      icon: <FaRupeeSign className="text-2xl text-blue-600" />,
       color: "bg-blue-50 border-blue-200",
     },
     {
       title: "Monthly Average",
-      value: `$${
+      value: `Rs. ${
         monthlyData.length > 0
           ? (
               monthlyData.reduce((sum, item) => sum + item.totalSpent, 0) /
@@ -290,7 +290,7 @@ const ExpenseReport = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                       <div className="text-sm font-semibold text-gray-900">
-                                        ${item.totalSpent.toLocaleString()}
+                                        Rs. {item.totalSpent.toLocaleString()}
                                       </div>
                                     </td>
                                   </tr>

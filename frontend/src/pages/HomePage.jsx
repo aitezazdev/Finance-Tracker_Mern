@@ -2,6 +2,7 @@ import React from "react";
 import { FaWallet, FaChartPie, FaSyncAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function HomePage() {
   const { user } = useSelector((state) => state.auth);
@@ -132,21 +133,21 @@ export default function HomePage() {
             {[
               {
                 quote:
-                  "This app completely changed how I manage my money. I saved over $3,000 in six months!",
-                author: "Sarah J.",
-                role: "Marketing Executive",
+                  "This app completely changed how I manage my money. I saved over 3 lacs Rs. in six months!",
+                author: "Dawood A.",
+                role: "Network Engineer",
               },
               {
                 quote:
                   "The reports make it so easy to understand where my money is going. Budgeting finally works.",
-                author: "Michael T.",
+                author: "Shah F.",
                 role: "Software Engineer",
               },
               {
                 quote:
                   "I’ve tried many finance apps, but this one is different. The UI is simple and powerful.",
-                author: "Lisa R.",
-                role: "Small Business Owner",
+                author: "Sama K.",
+                role: "Hr Manager",
               },
             ].map((testimonial, index) => (
               <div
@@ -164,6 +165,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }

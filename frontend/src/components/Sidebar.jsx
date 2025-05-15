@@ -9,6 +9,7 @@ import {
 import { BiTransferAlt } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { logout } from "../store/Slices/authSlice";
+import { toast } from "react-toastify";
 
 const navItems = [
   { name: "Dashboard", icon: FaHome, path: "/dashboard" },
@@ -23,6 +24,7 @@ const Sidebar = ({ setShowModal }) => {
 
   const handleLogout = () => {
     dispatch(logout());
+    toast.success("Logout successful");
     navigate("/login");
   };
   return (

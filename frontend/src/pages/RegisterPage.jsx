@@ -7,6 +7,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { BiLoaderAlt } from "react-icons/bi";
 import { FiUser } from "react-icons/fi";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const RegisterPage = () => {
 
     try {
       const result = await dispatch(registerUser(data)).unwrap();
+      toast.success("Registration successful");
 
       setData({
         name: "",
@@ -42,12 +44,10 @@ const RegisterPage = () => {
         password: "",
       });
       setErrors({});
-
       navigate("/");
 
-      console.log("Registration successful:", result);
     } catch (err) {
-      console.error("Registration error:", err);
+      toast.error("Registration failed");
 
       setErrors((prevErrors) => ({
         ...prevErrors,
