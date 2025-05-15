@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../store/Slices/authSlice";
+import { userInfo } from "../api/userInfoApi";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
@@ -9,6 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const [userData, setUserData] = useState({});
 
   const handleLogout = () => {
     dispatch(logout());
@@ -19,6 +21,27 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const getTrimmedName = () => {
+    if (!userData?.name) return "";
+    return userData.name
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase())
+      .join("");
+  };
+
+  const getUserProfile = async () => {
+    try {
+      const response = await userInfo();
+      setUserData(response.data);
+    } catch (error) {
+      console.log("Error fetching user profile:", error);
+    }
+  };
+
+  useEffect(() => {
+    user && getUserProfile();
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -68,21 +91,32 @@ const Navbar = () => {
             </li>
             <li>
               {user ? (
-                <NavLink
-                  to="/dashboard"
-                  className={({ isActive }) =>
-                    `hover:text-gray-300 transition duration-200 ${
-                      isActive && `border-b-2 border-b-cyan-600`
-                    }`
-                  }>
-                  Dashboard
-                </NavLink>
+                <span className="flex items-center space-x-4">
+                  <NavLink
+                    to="/dashboard"
+                    className={({ isActive }) =>
+                      `hover:text-gray-300 transition duration-200 ${
+                        isActive && `border-b-2 border-b-cyan-600`
+                      }`
+                    }>
+                    Dashboard
+                  </NavLink>
+                  <NavLink
+                    to="/profile"
+                    className={({ isActive }) =>
+                      `flex items-center justify-center w-10 h-10 rounded-full bg-cyan-600 text-white font-bold text-sm hover:opacity-90 transition duration-200 ${
+                        isActive ? "ring-2 ring-cyan-300" : ""
+                      }`
+                    }>
+                    {getTrimmedName()}
+                  </NavLink>
+                </span>
               ) : (
                 <NavLink
-                to="/login"
-                className="bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-600 transition duration-200 shadow-md">
-                Login
-              </NavLink>
+                  to="/login"
+                  className="bg-blue-500 px-5 py-2 rounded-full hover:bg-blue-600 transition duration-200 shadow-md">
+                  Login
+                </NavLink>
               )}
             </li>
           </>

@@ -10,12 +10,15 @@ import Transactions from "./pages/Transactions";
 import { getExpenses } from "./api/expenseApi";
 import { getIncomes } from "./api/incomeApi";
 import AnalyticsPage from "./pages/AnalyticsPage";
+import { useSelector } from "react-redux";
+import Profile from "./pages/Profile";
 
 const App = () => {
+  const { user } = useSelector((state) => state.auth);
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
   const [activeTab, setActiveTab] = useState("Expenses");
-   const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -28,7 +31,7 @@ const App = () => {
       }
     };
 
-    fetchExpenses();
+    user && fetchExpenses();
   }, []);
 
   useEffect(() => {
@@ -42,7 +45,7 @@ const App = () => {
       }
     };
 
-    fetchIncomes();
+    user && fetchIncomes();
   }, []);
 
   return (
@@ -54,7 +57,22 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<DashBoard expenses={expenses} incomes={incomes} showModal={showModal} setShowModal={setShowModal} setExpenses={setExpenses} setIncomes={setIncomes} setActiveTab={setActiveTab}  />} />
+          <Route
+            path="/dashboard"
+            element={
+              <DashBoard
+                expenses={expenses}
+                incomes={incomes}
+                showModal={showModal}
+                setShowModal={setShowModal}
+                setExpenses={setExpenses}
+                setIncomes={setIncomes}
+                setActiveTab={setActiveTab}
+              />
+
+            }
+          />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
         </Route>

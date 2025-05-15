@@ -41,7 +41,6 @@ const LoginPage = () => {
 
       navigate("/");
 
-      console.log("Login successful", result);
     } catch (error) {
       setErrors((prevErrors) => ({
         ...prevErrors,

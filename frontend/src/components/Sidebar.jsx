@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaPlusCircle,
@@ -18,6 +18,7 @@ const navItems = [
 ];
 
 const Sidebar = ({ setShowModal }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogout = () => {
