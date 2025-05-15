@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../store/Slices/authSlice";
-import { MdOutlineError } from "react-icons/md";
-import { MdOutlineEmail } from "react-icons/md";
+import { MdOutlineError, MdOutlineEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { BiLoaderAlt } from "react-icons/bi";
 import { FiUser } from "react-icons/fi";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -18,6 +18,7 @@ const RegisterPage = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,7 +35,7 @@ const RegisterPage = () => {
 
     try {
       const result = await dispatch(registerUser(data)).unwrap();
-      
+
       setData({
         name: "",
         email: "",
@@ -45,13 +46,12 @@ const RegisterPage = () => {
       navigate("/");
 
       console.log("Registration successful:", result);
-      
     } catch (err) {
       console.error("Registration error:", err);
-      
-      setErrors(prevErrors => ({
+
+      setErrors((prevErrors) => ({
         ...prevErrors,
-        backend: err || "Registration failed. Please try again."
+        backend: err || "Registration failed. Please try again.",
       }));
     }
   };
@@ -66,7 +66,7 @@ const RegisterPage = () => {
     setErrors((prevErrors) => ({
       ...prevErrors,
       [name]: "",
-      backend: ""
+      backend: "",
     }));
   };
 
@@ -83,7 +83,7 @@ const RegisterPage = () => {
             </h3>
             <p className="text-gray-600">Sign up to get started</p>
           </div>
-          
+
           {errors.backend && (
             <div
               className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded mb-6"
@@ -122,10 +122,12 @@ const RegisterPage = () => {
                 />
               </div>
               {errors.name && (
-                <p className="text-red-500 text-sm mt-1 font-medium">{errors.name}</p>
+                <p className="text-red-500 text-sm mt-1 font-medium">
+                  {errors.name}
+                </p>
               )}
             </div>
-            
+
             <div>
               <label
                 htmlFor="email"
@@ -149,10 +151,12 @@ const RegisterPage = () => {
                 />
               </div>
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1 font-medium">{errors.email}</p>
+                <p className="text-red-500 text-sm mt-1 font-medium">
+                  {errors.email}
+                </p>
               )}
             </div>
-            
+
             <div>
               <label
                 htmlFor="password"
@@ -167,19 +171,33 @@ const RegisterPage = () => {
                 <input
                   onChange={handleChange}
                   value={data.password}
-                  className="w-full pl-10 py-3 px-4 text-gray-700 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:bg-white border border-gray-300 transition-all"
-                  type="password"
+                  className="w-full pl-10 pr-10 py-3 px-4 text-gray-700 bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:bg-white border border-gray-300 transition-all"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   id="password"
                   placeholder="••••••••"
                   autoComplete="off"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 hover:text-gray-900 focus:outline-none"
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <AiFillEyeInvisible className="w-6 h-6 text-gray-500" />
+                  ) : (
+                    <AiFillEye className="w-6 h-6 text-gray-500" />
+                  )}
+                </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1 font-medium">{errors.password}</p>
+                <p className="text-red-500 text-sm mt-1 font-medium">
+                  {errors.password}
+                </p>
               )}
             </div>
-            
+
             <button
               type="submit"
               disabled={loading}
@@ -195,7 +213,7 @@ const RegisterPage = () => {
               )}
             </button>
           </div>
-          
+
           <div className="mt-8 text-center">
             <p className="text-gray-600">
               Already have an account?{" "}
