@@ -39,7 +39,7 @@ const LoginPage = () => {
         password: "",
       });
       setErrors({});
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       toast.error("Login failed");
       setErrors((prevErrors) => ({
